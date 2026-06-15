@@ -62,7 +62,23 @@
     margin-bottom: 14px;
 }
 
-.teams span {
+.teamInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.teamName {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+  max-width: 80px;
+  line-height: 1.2;
+}
+
+.vsText {
   color: #ffffff;
   font-size: 1.1rem;
   font-weight: 800;

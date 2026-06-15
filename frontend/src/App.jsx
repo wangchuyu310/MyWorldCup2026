@@ -9,6 +9,7 @@ import CallToAction from './components/CallToAction';
 import MyTeamPage from './components/MyTeamPage';
 import MyStarPage from './components/MyStarPage';
 import SchedulePage from './components/SchedulePage';
+import { scheduleMatches as liveScheduleMatches } from './data/liveSchedule';
 
 const fallbackMatches = [
   {
@@ -68,15 +69,38 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [onlineCount, setOnlineCount] = useState(0);
   const [activePage, setActivePage] = useState('today');
+  const [timeZone, setTimeZone] = useState(() => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC');
 
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/matches`);
-        if (Array.isArray(response.data) && response.data.length > 0) {
-          setMatches(normalizeMatches(response.data));
+        // 优先使用实时数据
+        if (liveScheduleMatches && liveScheduleMatches.length > 0) {
+          const normalizedLiveMatches = liveScheduleMatches.map(match => ({
+            id: `live-${match.matchNo}`,
+            home_team: match.teamA,
+            away_team: match.teamB,
+            kickoff_at: `${match.date}T${match.kickoffET}:00-04:00`,
+            venue: match.stadium,
+            location: `${match.city}, ${match.country}`,
+            status: match.status,
+            home_score: match.homeScore,
+            away_score: match.awayScore,
+            stage: match.stage,
+            group: match.group
+          }));
+          setMatches(normalizedLiveMatches);
+        } else {
+          // 尝试从 API 获取
+          const response = await axios.get(`${API_BASE_URL}/matches`);
+          if (Array.isArray(response.data) && response.data.length > 0) {
+            setMatches(normalizeMatches(response.data));
+          } else {
+            setMatches(fallbackMatches);
+          }
         }
       } catch (err) {
+        console.log('Using fallback matches');
         setMatches(fallbackMatches);
       } finally {
         setLoading(false);
@@ -132,7 +156,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <Header onlineCount={onlineCount} />
+      <Header onlineCount={onlineCount} onTimeZoneChange={setTimeZone} />
       <div className="content-shell">
         <Sidebar activePage={activePage} onPageChange={setActivePage} />
         <main className="main-content">
@@ -144,8 +168,8 @@ function App() {
             <SchedulePage />
           ) : (
             <>
-              <FeaturedMatches matches={matches} loading={loading} />
-              <UpcomingMatches matches={matches} />
+              <FeaturedMatches matches={matches} loading={loading} timeZone={timeZone} />
+              <UpcomingMatches matches={matches} timeZone={timeZone} />
               <CallToAction />
             </>
           )}

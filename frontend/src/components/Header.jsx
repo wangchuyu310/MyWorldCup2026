@@ -50,13 +50,20 @@ function formatDateTime(date, timeZone) {
   return `${partMap.month} ${partMap.day}, ${partMap.hour}:${partMap.minute}`;
 }
 
-const Header = ({ onlineCount }) => {
+const Header = ({ onlineCount, onTimeZoneChange }) => {
   const timeZones = useMemo(getTimeZones, []);
   const [selectedTimeZone, setSelectedTimeZone] = useState(getDefaultTimeZone);
   const [now, setNow] = useState(() => new Date());
   const measureRef = useRef(null);
   const [selectWidth, setSelectWidth] = useState(128);
   const displayTime = formatDateTime(now, selectedTimeZone);
+
+  const handleTimeZoneChange = (newTimeZone) => {
+    setSelectedTimeZone(newTimeZone);
+    if (onTimeZoneChange) {
+      onTimeZoneChange(newTimeZone);
+    }
+  };
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
@@ -89,7 +96,7 @@ const Header = ({ onlineCount }) => {
             value={selectedTimeZone}
             aria-label="Time Zone"
             style={{ width: `${selectWidth}px` }}
-            onChange={(event) => setSelectedTimeZone(event.target.value)}
+            onChange={(event) => handleTimeZoneChange(event.target.value)}
           >
             {timeZones.map((timeZone) => (
               <option key={timeZone} value={timeZone}>

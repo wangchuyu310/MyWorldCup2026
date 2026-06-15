@@ -21,6 +21,7 @@
   inset: 0;
 }
 
+/* ===== 原始国家 ===== */
 .usa {
   background:
     repeating-linear-gradient(
@@ -129,6 +130,693 @@
   background: linear-gradient(to bottom, #050505 0 33.33%, #dd0000 33.33% 66.66%, #ffce00 66.66%);
 }
 
+/* ===== A组 ===== */
+.southAfrica {
+  background: linear-gradient(to bottom, #007749 0 33.33%, #ffffff 33.33% 66.66%, #de3831 66.66%);
+}
+
+.southAfrica .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 40px solid #000000;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.koreaRepublic {
+  background: #ffffff;
+}
+
+.koreaRepublic .symbol::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #c60c30 50%, #003478 50%);
+  transform: translate(-50%, -50%) rotate(30deg);
+}
+
+.czechia {
+  background: linear-gradient(to bottom, #ffffff 0 50%, #d7141a 50%);
+}
+
+.czechia .symbol::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: #11457e;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* ===== B组 ===== */
+.bosnia {
+  background: linear-gradient(to bottom, #002395 0 33.33%, #fecb00 33.33% 66.66%, #ffffff 66.66%);
+}
+
+.netherlands {
+  background: linear-gradient(to bottom, #ae1c28 0 33.33%, #ffffff 33.33% 66.66%, #21468b 66.66%);
+}
+
+.chile {
+  background: linear-gradient(to bottom, #ffffff 0 50%, #d52b1e 50%);
+}
+
+.chile .symbol::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35%;
+  height: 50%;
+  background: #0039a6;
+}
+
+.chile .symbol::before {
+  content: "★";
+  position: absolute;
+  top: 15%;
+  left: 12%;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.qatar {
+  background: #8d1b3d;
+}
+
+.qatar .symbol::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35%;
+  height: 100%;
+  background: #ffffff;
+  clip-path: polygon(0 0, 70% 12%, 100% 25%, 70% 38%, 100% 50%, 70% 62%, 100% 75%, 70% 88%, 100% 100%, 0 100%);
+}
+
+.switzerland {
+  background: #da020e;
+}
+
+.switzerland .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 10px;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+.switzerland .symbol::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 30px;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+/* ===== C组 ===== */
+.spain {
+  background: linear-gradient(to bottom, #aa151b 0 25%, #f1bf00 25% 75%, #aa151b 75%);
+}
+
+.newZealand {
+  background: #00247d;
+}
+
+.newZealand .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.colombia {
+  background: linear-gradient(to bottom, #fce300 0 50%, #003893 50% 75%, #ce1126 75%);
+}
+
+.scotland {
+  background: #005eb8;
+}
+
+.scotland .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 16px;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+.scotland .symbol::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 100%;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+.haiti {
+  background: linear-gradient(to bottom, #00209f 0 33.33%, #d21034 33.33% 66.66%, #00209f 66.66%);
+}
+
+.haiti .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 30px;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+.morocco {
+  background: #c1272d;
+}
+
+.morocco .symbol::after {
+  content: "🟢";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 30px;
+  transform: translate(-50%, -50%);
+}
+
+/* ===== D组 ===== */
+.paraguay {
+  background: linear-gradient(to bottom, #d52b1e 0 33.33%, #ffffff 33.33% 66.66%, #0038a8 66.66%);
+}
+
+.australia {
+  background: #00008b;
+}
+
+.australia .symbol::after {
+  content: "★";
+  position: absolute;
+  top: 20%;
+  left: 60%;
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.australia .symbol::before {
+  content: "★★★";
+  position: absolute;
+  top: 40%;
+  left: 55%;
+  color: #ffffff;
+  font-size: 10px;
+  letter-spacing: 8px;
+}
+
+.turkiye {
+  background: #e30a17;
+}
+
+.turkiye .symbol::after {
+  content: "★";
+  position: absolute;
+  top: 35%;
+  left: 55%;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.turkiye .symbol::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: 3px solid #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+/* ===== E组 ===== */
+.coteDIvoire {
+  background: linear-gradient(to right, #f77f00 0 33.33%, #ffffff 33.33% 66.66%, #009e60 66.66%);
+}
+
+.ecuador {
+  background: linear-gradient(to bottom, #ffd100 0 50%, #0072ce 50% 75%, #ce1126 75%);
+}
+
+.ecuador .symbol::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  width: 30px;
+  height: 20px;
+  background: #0072ce;
+  transform: translateX(-50%);
+}
+
+.curacao {
+  background: linear-gradient(to bottom, #002b7f 0 33.33%, #ffffff 33.33% 66.66%, #002b7f 66.66%);
+}
+
+/* ===== F组 ===== */
+.sweden {
+  background: #006aa7;
+}
+
+.sweden .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  width: 100%;
+  height: 16px;
+  background: #fecc00;
+  transform: translate(-50%, -50%);
+}
+
+.sweden .symbol::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  width: 16px;
+  height: 100%;
+  background: #fecc00;
+  transform: translate(-50%, -50%);
+}
+
+.tunisia {
+  background: #e70013;
+}
+
+.tunisia .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+.tunisia .symbol::before {
+  content: "🌙";
+  position: absolute;
+  top: 45%;
+  left: 52%;
+  font-size: 16px;
+  transform: translate(-50%, -50%);
+}
+
+.japan {
+  background: #ffffff;
+}
+
+.japan .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #bc002d;
+  transform: translate(-50%, -50%);
+}
+
+/* ===== G组 ===== */
+.iran {
+  background: linear-gradient(to bottom, #239f40 0 33.33%, #ffffff 33.33% 66.66%, #da0000 66.66%);
+}
+
+.iran .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #da0000;
+  transform: translate(-50%, -50%);
+}
+
+.belgium {
+  background: linear-gradient(to right, #000000 0 33.33%, #fdda24 33.33% 66.66%, #ef3340 66.66%);
+}
+
+.egypt {
+  background: linear-gradient(to bottom, #ce1126 0 33.33%, #ffffff 33.33% 66.66%, #000000 66.66%);
+}
+
+.egypt .symbol::after {
+  content: "🦅";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  transform: translate(-50%, -50%);
+}
+
+/* ===== H组 ===== */
+.saudiArabia {
+  background: #006c35;
+}
+
+.saudiArabia .symbol::after {
+  content: "";
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 30px solid #ffffff;
+  transform: translateX(-50%);
+}
+
+.uruguay {
+  background: linear-gradient(to bottom, #ffffff 0 16.66%, #0038a8 16.66% 33.33%, #ffffff 33.33% 50%, #0038a8 50% 66.66%, #ffffff 66.66% 83.33%, #0038a8 83.33%);
+}
+
+.uruguay .symbol::after {
+  content: "☀";
+  position: absolute;
+  top: 8%;
+  left: 15%;
+  color: #fcd116;
+  font-size: 14px;
+}
+
+.caboVerde {
+  background: linear-gradient(to bottom, #003893 0 50%, #ffffff 50% 75%, #cf2027 75%);
+}
+
+.caboVerde .symbol::after {
+  content: "★";
+  position: absolute;
+  top: 25%;
+  left: 15%;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+/* ===== I组 ===== */
+.senegal {
+  background: linear-gradient(to right, #00853f 0 33.33%, #fdef42 33.33% 66.66%, #e31b23 66.66%);
+}
+
+.senegal .symbol::after {
+  content: "★";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #00853f;
+  font-size: 18px;
+  transform: translate(-50%, -50%);
+}
+
+.iraq {
+  background: linear-gradient(to bottom, #ce1126 0 33.33%, #ffffff 33.33% 66.66%, #000000 66.66%);
+}
+
+.iraq .symbol::after {
+  content: "الله اكبر";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #008000;
+  font-size: 8px;
+  transform: translate(-50%, -50%);
+}
+
+.norway {
+  background: #ef2b2d;
+}
+
+.norway .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  width: 100%;
+  height: 16px;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+.norway .symbol::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  width: 16px;
+  height: 100%;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+/* ===== J组 ===== */
+.algeria {
+  background: linear-gradient(to right, #006233 0 50%, #ffffff 50%);
+}
+
+.algeria .symbol::after {
+  content: "☪";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #d21034;
+  font-size: 24px;
+  transform: translate(-50%, -50%);
+}
+
+.austria {
+  background: linear-gradient(to bottom, #ed2939 0 33.33%, #ffffff 33.33% 66.66%, #ed2939 66.66%);
+}
+
+.jordan {
+  background: linear-gradient(to bottom, #000000 0 33.33%, #ffffff 33.33% 66.66%, #007a3d 66.66%);
+}
+
+.jordan .symbol::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 50px solid #ce1126;
+  border-top: 25px solid transparent;
+  border-bottom: 25px solid transparent;
+}
+
+/* ===== K组 ===== */
+.portugal {
+  background: linear-gradient(to right, #006600 0 40%, #ff0000 40%);
+}
+
+.portugal .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 28%;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffff00;
+  border: 2px solid #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+.congoDR {
+  background: #007fff;
+}
+
+.congoDR .symbol::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 45%, #f7d618 45% 55%, transparent 55%);
+}
+
+.congoDR .symbol::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 60px solid #ce1021;
+  border-bottom: 40px solid transparent;
+}
+
+.uzbekistan {
+  background: linear-gradient(to bottom, #1eb53a 0 33.33%, #ffffff 33.33% 66.66%, #0099b5 66.66%);
+}
+
+.uzbekistan .symbol::after {
+  content: "";
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* ===== L组 ===== */
+.ghana {
+  background: linear-gradient(to bottom, #ce1126 0 33.33%, #fcd116 33.33% 66.66%, #006b3f 66.66%);
+}
+
+.ghana .symbol::after {
+  content: "★";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #000000;
+  font-size: 18px;
+  transform: translate(-50%, -50%);
+}
+
+.panama {
+  background: linear-gradient(to bottom, #ffffff 0 25%, #da020e 25% 50%, #0072ce 50% 75%, #ffffff 75%);
+}
+
+.panama .symbol::after {
+  content: "★";
+  position: absolute;
+  top: 15%;
+  left: 15%;
+  color: #0072ce;
+  font-size: 14px;
+}
+
+.panama .symbol::before {
+  content: "★";
+  position: absolute;
+  bottom: 15%;
+  right: 15%;
+  color: #da020e;
+  font-size: 14px;
+}
+
+.croatia {
+  background: linear-gradient(to bottom, #ff0000 0 33.33%, #ffffff 33.33% 66.66%, #171796 66.66%);
+}
+
+.croatia .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 24px;
+  background: #ff0000;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 其他国旗 */
+.russia {
+  background: linear-gradient(to bottom, #ffffff 0 33.33%, #0039a6 33.33% 66.66%, #d52b1e 66.66%);
+}
+
+.italy {
+  background: linear-gradient(to right, #009246 0 33.33%, #ffffff 33.33% 66.66%, #ce2b37 66.66%);
+}
+
+.wales {
+  background: #00b140;
+}
+
+.wales .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 36px;
+  background: #ffffff;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  transform: translate(-50%, -50%);
+}
+
+.ukraine {
+  background: linear-gradient(to bottom, #005bbb 0 50%, #ffd500 50%);
+}
+
+.poland {
+  background: linear-gradient(to bottom, #ffffff 0 50%, #dc143c 50%);
+}
+
+.denmark {
+  background: #c60c30;
+}
+
+.denmark .symbol::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  width: 100%;
+  height: 16px;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+.denmark .symbol::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  width: 16px;
+  height: 100%;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+.serbia {
+  background: linear-gradient(to bottom, #c6363c 0 33.33%, #1c5fa8 33.33% 66.66%, #ffffff 66.66%);
+}
+
+/* 通用样式 */
 .generic {
   background: linear-gradient(135deg, #1c3865, #5b2fa7);
 }

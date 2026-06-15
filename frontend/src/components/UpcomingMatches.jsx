@@ -2,8 +2,20 @@ import React from 'react';
 import styles from './UpcomingMatches.module.css';
 import Flag from './Flag';
 
-const UpcomingMatches = ({ matches }) => {
-  const upcoming = matches.slice(0, 4);
+const UpcomingMatches = ({ matches, timeZone }) => {
+  const tz = timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  const today = getLocalDateString(tz);
+  
+  let upcoming = matches.filter(match => {
+    const matchDate = getMatchDateInZone(match.kickoff_at, tz);
+    return matchDate >= today;
+  });
+  
+  if (upcoming.length === 0) {
+    upcoming = matches;
+  }
+  
+  upcoming = upcoming.slice(0, 4);
 
   return (
     <div className={styles.upcomingMatches}>
@@ -14,11 +26,17 @@ const UpcomingMatches = ({ matches }) => {
       <div className={styles.matchesGrid}>
         {upcoming.map((match) => (
           <div key={match.id} className={styles.matchCard}>
-            <div className={styles.time}>{formatMatchTime(match.kickoff_at)}</div>
+            <div className={styles.time}>{formatMatchTime(match.kickoff_at, tz)}</div>
             <div className={styles.teams}>
-                <Flag country={match.home_team} compact />
-                <span>VS</span>
-                <Flag country={match.away_team} compact />
+                <div className={styles.teamInfo}>
+                    <Flag country={match.home_team} compact />
+                    <span className={styles.teamName}>{match.home_team}</span>
+                </div>
+                <span className={styles.vsText}>VS</span>
+                <div className={styles.teamInfo}>
+                    <Flag country={match.away_team} compact />
+                    <span className={styles.teamName}>{match.away_team}</span>
+                </div>
             </div>
             <div className={styles.venue}>{match.venue}</div>
             <div className={styles.location}>{match.location}</div>
@@ -29,18 +47,46 @@ const UpcomingMatches = ({ matches }) => {
   );
 };
 
-function formatMatchTime(value) {
+function getLocalDateString(tz) {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: tz
+  }).formatToParts(now);
+  const partMap = Object.fromEntries(parts.map(p => [p.type, p.value]));
+  return `${partMap.year}-${partMap.month}-${partMap.day}`;
+}
+
+function getMatchDateInZone(value, tz) {
   const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '9999-99-99';
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: tz
+  }).formatToParts(date);
+  const partMap = Object.fromEntries(parts.map(p => [p.type, p.value]));
+  return `${partMap.year}-${partMap.month}-${partMap.day}`;
+}
 
-  if (Number.isNaN(date.getTime())) {
-    return 'JUN 14, 13:00';
-  }
+function formatMatchTime(value, tz) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'TBD';
 
-  const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
-  const day = date.getDate();
-  const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+  const parts = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: tz
+  }).formatToParts(date);
+  const partMap = Object.fromEntries(parts.map(p => [p.type, p.value]));
 
-  return `${month} ${day}, ${time}`;
+  return `${partMap.month.toUpperCase()} ${partMap.day}, ${partMap.hour}:${partMap.minute}`;
 }
 
 export default UpcomingMatches;
