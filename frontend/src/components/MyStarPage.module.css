@@ -1,0 +1,584 @@
+.myStarPage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 18px;
+  color: #f7f9ff;
+}
+
+.topBar,
+.updateBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.backButton,
+.tournamentSelect,
+.awardsHeader button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #c8d2e4;
+  background: rgba(4, 13, 29, 0.78);
+  border: 1px solid rgba(135, 156, 198, 0.28);
+  border-radius: 999px;
+  padding: 10px 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.backButton svg,
+.tournamentSelect svg {
+  width: 24px;
+  height: 24px;
+}
+
+.playerHero,
+.awardCard,
+.updateBar {
+  border: 1px solid rgba(135, 156, 198, 0.25);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 14% 20%, rgba(62, 132, 255, 0.2), transparent 32%),
+    linear-gradient(145deg, rgba(4, 15, 34, 0.9), rgba(2, 14, 31, 0.97));
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.02);
+}
+
+.playerHero {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.58fr) minmax(0, 1fr);
+  min-height: 300px;
+  overflow: hidden;
+}
+
+.playerPortrait {
+  position: relative;
+  display: grid;
+  align-items: end;
+  padding: 26px 30px 0;
+  background:
+    radial-gradient(circle at 55% 45%, rgba(255, 183, 57, 0.18), transparent 28%),
+    radial-gradient(circle at 38% 50%, rgba(86, 151, 255, 0.22), transparent 42%);
+}
+
+.playerPortrait::before {
+  content: "";
+  position: absolute;
+  inset: 26px 38px;
+  border: 1px solid rgba(130, 174, 255, 0.22);
+  border-radius: 50%;
+  opacity: 0.75;
+}
+
+.playerSilhouette {
+  position: relative;
+  width: min(260px, 80%);
+  height: 260px;
+  border-radius: 42% 42% 0 0;
+  background:
+    linear-gradient(90deg, transparent 0 38%, rgba(255, 211, 83, 0.95) 38% 50%, transparent 50%),
+    linear-gradient(160deg, #1b2739, #060a12 58%);
+  box-shadow: 34px 18px 60px rgba(0, 0, 0, 0.42);
+}
+
+.playerSilhouette::before {
+  content: "";
+  position: absolute;
+  top: -34px;
+  left: 54%;
+  width: 76px;
+  height: 88px;
+  border-radius: 46% 44% 50% 50%;
+  background: linear-gradient(145deg, #d39a68, #8d553b);
+  transform: translateX(-50%);
+}
+
+.playerSilhouette::after {
+  content: "PLAYER X";
+  position: absolute;
+  top: 74px;
+  left: 50%;
+  color: #e9edf4;
+  font-size: 1.45rem;
+  font-weight: 900;
+  transform: translateX(-50%) rotate(-7deg);
+}
+
+.captainBand {
+  position: absolute;
+  top: 128px;
+  left: -8px;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 34px;
+  color: #101522;
+  background: #ffcc32;
+  border-radius: 4px;
+  font-weight: 900;
+}
+
+.playerSilhouette strong {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 5.7rem;
+  line-height: 1;
+  transform: translateX(-50%);
+}
+
+.playerInfo {
+  padding: 42px 34px 28px;
+}
+
+.playerInfo h2 {
+  margin: 0 0 10px;
+  font-size: clamp(3.3rem, 7vw, 5.2rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.metaRow,
+.statsRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.metaRow {
+  color: #c6cedd;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+.metaRow span + span {
+  border-left: 1px solid rgba(198, 206, 221, 0.34);
+  padding-left: 20px;
+}
+
+.argentinaShield {
+  width: 30px;
+  height: 36px;
+  border-radius: 0 0 12px 12px;
+  background: linear-gradient(to bottom, #74b7f0 0 33%, #ffffff 33% 66%, #74b7f0 66%);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.statsRow {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(135, 156, 198, 0.25);
+}
+
+.statItem {
+  display: grid;
+  grid-template-columns: 28px auto;
+  gap: 4px 10px;
+  min-width: 112px;
+  padding-right: 20px;
+  border-right: 1px solid rgba(135, 156, 198, 0.18);
+}
+
+.statItem svg {
+  width: 26px;
+  height: 26px;
+  color: #a9d6ff;
+}
+
+.statItem strong {
+  font-size: 1.6rem;
+}
+
+.statItem span {
+  grid-column: 1 / -1;
+  color: #b9c2d1;
+  text-transform: uppercase;
+}
+
+.awardsHeader {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.awardsHeader > svg {
+  width: 54px;
+  height: 54px;
+  color: #f4b53f;
+}
+
+.awardsHeader h2 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.awardsHeader p {
+  margin: 4px 0 0;
+  color: #c7cedd;
+}
+
+.awardsHeader button {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  color: #70c7ff;
+  text-transform: none;
+}
+
+.awardsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.awardCard {
+  padding: 24px;
+  min-height: 360px;
+}
+
+.bootCard {
+  border-color: #56c1ff;
+}
+
+.ballCard {
+  border-color: #f2b72d;
+}
+
+.gloveCard {
+  border-color: #be73ff;
+}
+
+.youngCard {
+  border-color: #7bd14a;
+}
+
+.awardIntro {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: start;
+}
+
+.awardIntro h3 {
+  margin: 18px 0 8px;
+  font-size: 1.55rem;
+  text-transform: uppercase;
+}
+
+.awardIntro p {
+  margin: 0;
+  color: #c8d0df;
+}
+
+.statusBadge {
+  color: #a7f27f;
+  border: 1px solid rgba(122, 211, 74, 0.55);
+  border-radius: 5px;
+  padding: 6px 10px;
+  background: rgba(55, 118, 43, 0.22);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.purple {
+  color: #d49aff;
+  border-color: rgba(190, 115, 255, 0.55);
+  background: rgba(115, 55, 160, 0.22);
+}
+
+.awardArt {
+  position: relative;
+  width: 120px;
+  height: 112px;
+}
+
+.awardArt span {
+  position: absolute;
+  inset: auto 12px 0;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #2a2215, #c79b3b, #2a2215);
+}
+
+.boot::before,
+.glove::before,
+.young::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  bottom: 22px;
+  width: 82px;
+  height: 56px;
+  background: linear-gradient(135deg, #ffe08a, #bd7e18 64%, #5f3510);
+  clip-path: polygon(0 48%, 54% 0, 82% 18%, 100% 62%, 72% 82%, 18% 80%);
+  filter: drop-shadow(0 0 12px rgba(244, 181, 63, 0.35));
+}
+
+.ball::before,
+.young::after {
+  content: "";
+  position: absolute;
+  left: 28px;
+  top: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 34%, rgba(255,255,255,0.35), transparent 22%),
+    conic-gradient(from 20deg, #ffe08a, #c58a22, #ffdf74, #a96c14, #ffe08a);
+  border: 2px solid #f8d167;
+}
+
+.glove::before {
+  width: 74px;
+  height: 86px;
+  clip-path: polygon(7% 35%, 17% 0, 31% 34%, 37% 0, 49% 34%, 55% 0, 67% 35%, 75% 9%, 88% 40%, 80% 92%, 28% 100%);
+}
+
+.young::before {
+  width: 48px;
+  height: 88px;
+  left: 44px;
+  clip-path: polygon(50% 0, 82% 72%, 50% 100%, 18% 72%);
+}
+
+.stadium {
+  width: 74px;
+  height: 54px;
+}
+
+.stadium::before {
+  content: "";
+  position: absolute;
+  inset: 10px 2px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #d7edff 0 18%, #153456 19% 36%, transparent 37%);
+  border: 1px solid rgba(216, 237, 255, 0.6);
+}
+
+.metricBox,
+.stageBox,
+.threeStats,
+.scoreBox,
+.eligibilityBox,
+.progressBox {
+  margin-top: 18px;
+  border: 1px solid rgba(135, 156, 198, 0.2);
+  border-radius: 10px;
+  background: rgba(5, 23, 50, 0.7);
+}
+
+.metricBox {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.metricBox > div,
+.threeStats > div,
+.scoreBox > div {
+  padding: 16px 20px;
+}
+
+.metricBox > div:nth-child(odd),
+.threeStats > div:not(:last-child),
+.scoreBox > div:first-child {
+  border-right: 1px solid rgba(135, 156, 198, 0.18);
+}
+
+.metricBox > div:nth-child(n + 3) {
+  border-top: 1px solid rgba(135, 156, 198, 0.18);
+}
+
+.metricBox span,
+.threeStats span,
+.scoreBox span,
+.eligibilityBox span,
+.progressBox span {
+  display: block;
+  color: #c5ccda;
+  text-transform: uppercase;
+}
+
+.metricBox strong,
+.threeStats strong,
+.scoreBox strong,
+.eligibilityBox strong {
+  display: block;
+  color: #ffffff;
+  font-size: 1.65rem;
+  text-transform: uppercase;
+}
+
+.metricBox small,
+.scoreBox small,
+.threeStats small {
+  color: #bcc5d4;
+  text-transform: uppercase;
+}
+
+.metricBox div:first-child strong,
+.metricBox div:last-child strong {
+  color: #62bfff;
+}
+
+.stageBox {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: center;
+  padding: 14px 20px;
+}
+
+.threeStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.scoreBox {
+  display: grid;
+  grid-template-columns: 0.55fr 1fr;
+}
+
+.scoreBox strong {
+  color: #f4b53f;
+}
+
+.progressBox {
+  padding: 16px 20px;
+}
+
+.progressBox > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.progressBox p {
+  margin: 12px 0 0;
+  color: #c5ccda;
+  text-transform: uppercase;
+}
+
+.progressTrack {
+  height: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(139, 160, 191, 0.18);
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.blue {
+  background: linear-gradient(90deg, #56b8ff, #91d8ff);
+}
+
+.gold {
+  background: linear-gradient(90deg, #f2b72d, #ffe36f);
+}
+
+.green {
+  background: linear-gradient(90deg, #67c84e, #9ae56f);
+}
+
+.lockedAward {
+  display: grid;
+  place-items: center;
+  min-height: 250px;
+  text-align: center;
+  color: #d9a0ff;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(158, 80, 255, 0.18), transparent 34%);
+}
+
+.lockedAward span {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 1px solid rgba(190, 115, 255, 0.6);
+  font-size: 2.3rem;
+}
+
+.lockedAward h3 {
+  margin: 8px 0 0;
+  text-transform: uppercase;
+}
+
+.lockedAward p {
+  margin: 0;
+  color: #d4d9e5;
+}
+
+.eligibilityBox {
+  padding: 18px 22px;
+}
+
+.eligibilityBox strong {
+  color: #86df60;
+}
+
+.eligibilityBox p {
+  margin: 4px 0 0;
+  color: #c9d1df;
+}
+
+.updateBar {
+  padding: 12px 20px;
+  color: #aeb8ca;
+}
+
+.updateBar span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 1180px) {
+  .playerHero,
+  .awardsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .playerPortrait {
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 720px) {
+  .topBar,
+  .awardsHeader,
+  .updateBar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .awardIntro,
+  .metricBox,
+  .scoreBox,
+  .threeStats,
+  .stageBox {
+    grid-template-columns: 1fr;
+  }
+
+  .metricBox > div,
+  .threeStats > div,
+  .scoreBox > div {
+    border-right: 0 !important;
+    border-top: 1px solid rgba(135, 156, 198, 0.18);
+  }
+
+  .awardIntro {
+    gap: 8px;
+  }
+}

@@ -1,0 +1,569 @@
+.myTeamPage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.9fr);
+  gap: 18px;
+  padding-top: 18px;
+  color: #f7f9ff;
+}
+
+.leftColumn,
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.heroPanel,
+.selectedPanel,
+.journeyPanel,
+.resultsPanel {
+  border: 1px solid rgba(135, 156, 198, 0.25);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 82% 0%, rgba(50, 146, 255, 0.18), transparent 36%),
+    linear-gradient(145deg, rgba(4, 15, 34, 0.88), rgba(2, 14, 31, 0.96));
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.02);
+}
+
+.heroPanel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 160px;
+  padding: 26px 30px;
+}
+
+.heroPanel p,
+.selectedPanel > h3 {
+  margin: 0;
+  color: #aeb8cb;
+  font-size: 1.35rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.heroPanel h2 {
+  margin: 4px 0 0;
+  font-size: clamp(2.4rem, 4.2vw, 3.75rem);
+  line-height: 0.98;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.heroPanel span {
+  color: #f2f5ff;
+  font-size: 1.35rem;
+}
+
+.heroTrophy {
+  flex: 0 0 88px;
+  width: 88px;
+  height: 108px;
+  color: #f4b53f;
+  filter: drop-shadow(0 0 16px rgba(244, 181, 63, 0.35));
+}
+
+.journeyPanel {
+  padding: 16px 18px 28px;
+}
+
+.groupIntro {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.peopleIcon {
+  display: grid;
+  place-items: center;
+  width: 82px;
+  height: 82px;
+  color: #9dd4ff;
+  border: 1px solid #79c4ff;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(69, 166, 255, 0.32), rgba(8, 28, 55, 0.92));
+}
+
+.peopleIcon svg {
+  width: 48px;
+  height: 48px;
+}
+
+.groupIntro h3,
+.resultCard h3 {
+  margin: 0 0 4px;
+  color: #56b8ff;
+  font-size: 1.45rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.groupIntro p,
+.checkpointCard p,
+.lockedStage p {
+  margin: 0;
+  color: #f1f4ff;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 96px;
+}
+
+.timelineRail {
+  position: absolute;
+  top: -8px;
+  bottom: 178px;
+  left: 44px;
+  width: 4px;
+  border-radius: 99px;
+  background: repeating-linear-gradient(to bottom, #ffffff 0 10px, transparent 10px 18px);
+  opacity: 0.9;
+}
+
+.timelineRail::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #ffb400;
+  box-shadow: 0 0 24px rgba(255, 180, 0, 0.75);
+  transform: translateX(-50%);
+}
+
+.matchStack {
+  border: 1px solid rgba(96, 165, 239, 0.25);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(3, 19, 42, 0.66);
+}
+
+.matchRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 68px;
+  gap: 18px;
+  align-items: center;
+  min-height: 118px;
+  padding: 18px 20px 18px 84px;
+  border-bottom: 1px solid rgba(135, 156, 198, 0.17);
+}
+
+.matchRow:last-child {
+  border-bottom: 0;
+}
+
+.stadiumMark {
+  position: absolute;
+  left: -86px;
+  display: grid;
+  place-items: center;
+  width: 74px;
+  height: 54px;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at center, rgba(222, 242, 255, 0.92), rgba(64, 132, 189, 0.72) 35%, transparent 36%),
+    conic-gradient(from 0deg, #e7f5ff 0 10deg, #0c3150 10deg 22deg, #e7f5ff 22deg 32deg, #0c3150 32deg 48deg, #e7f5ff 48deg 60deg, #0c3150 60deg 360deg);
+  box-shadow: 0 12px 16px rgba(0, 0, 0, 0.28);
+}
+
+.stadiumMark span {
+  width: 54px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #1fa15a, #e2e8f3, #d93639);
+  border: 2px solid #25354d;
+}
+
+.stepNumber {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #8bd2ff, #5fafef);
+  color: #05152c;
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.matchInfo h3,
+.lockedStage h3,
+.checkpointCard h3 {
+  margin: 0 0 4px;
+  font-size: 1.45rem;
+  text-transform: uppercase;
+}
+
+.matchInfo p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.matchInfo span {
+  color: #c5cce0;
+}
+
+.statusIcon {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.statusIcon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.advanced {
+  border: 2px solid #78d22d;
+  background: rgba(41, 119, 36, 0.62);
+}
+
+.current {
+  border: 2px solid #ffcb1c;
+  background: rgba(85, 68, 15, 0.5);
+}
+
+.eliminated {
+  background: #ec3333;
+}
+
+.checkpoint {
+  position: relative;
+  margin: 22px 0 24px;
+}
+
+.flagNode {
+  position: absolute;
+  left: -74px;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 5px solid #ffcf35;
+  box-shadow: 0 0 22px rgba(255, 207, 53, 0.55);
+  transform: translateY(-50%);
+}
+
+.checkpointCard {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 56px;
+  gap: 18px;
+  align-items: center;
+  min-height: 106px;
+  padding: 18px 24px;
+  color: #07142a;
+  background: linear-gradient(135deg, #ffffff, #f5f7fb);
+  border: 1px solid #ffd342;
+  border-radius: 12px;
+  box-shadow: 0 0 24px rgba(255, 195, 35, 0.26);
+}
+
+.checkpointCard > svg {
+  width: 38px;
+  height: 38px;
+}
+
+.lockedStack {
+  display: grid;
+  gap: 12px;
+}
+
+.lockedStage {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) 56px;
+  align-items: center;
+  gap: 18px;
+  min-height: 94px;
+  padding: 14px 18px;
+  border: 1px solid rgba(135, 156, 198, 0.22);
+  border-radius: 12px;
+  background: rgba(5, 24, 51, 0.78);
+}
+
+.stageIcon,
+.lockIcon {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(221, 229, 244, 0.5);
+  background: rgba(8, 19, 40, 0.7);
+}
+
+.stageIcon {
+  width: 60px;
+  height: 60px;
+}
+
+.stageIcon svg {
+  width: 38px;
+  height: 38px;
+}
+
+.lockIcon {
+  width: 46px;
+  height: 46px;
+  color: #aeb8cb;
+}
+
+.finalSplit {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.legend {
+  display: flex;
+  justify-content: space-around;
+  gap: 14px;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border: 1px solid rgba(135, 156, 198, 0.22);
+  border-radius: 10px;
+  background: rgba(3, 16, 35, 0.72);
+  text-transform: uppercase;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend .statusIcon {
+  width: 30px;
+  height: 30px;
+  font-size: 1rem;
+}
+
+.legend .statusIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.selectedPanel {
+  padding: 22px 24px;
+}
+
+.teamCard {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 86px;
+  margin-top: 12px;
+  padding: 16px;
+  color: #08152b;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ffffff, #f0f2f6);
+}
+
+.teamCard strong {
+  display: block;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.teamCard span:last-child {
+  color: #07142a;
+}
+
+.ukFlag {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 86px;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: 3px;
+  background:
+    linear-gradient(35deg, transparent 0 42%, #ffffff 42% 48%, #c8102e 48% 52%, #ffffff 52% 58%, transparent 58%),
+    linear-gradient(-35deg, transparent 0 42%, #ffffff 42% 48%, #c8102e 48% 52%, #ffffff 52% 58%, transparent 58%),
+    linear-gradient(to right, transparent 0 38%, #ffffff 38% 45%, #c8102e 45% 55%, #ffffff 55% 62%, transparent 62%),
+    linear-gradient(to bottom, transparent 0 34%, #ffffff 34% 42%, #c8102e 42% 58%, #ffffff 58% 66%, transparent 66%),
+    #012169;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22);
+}
+
+.resultsPanel {
+  padding: 18px 12px 14px;
+}
+
+.resultsPanel > h2 {
+  margin: 0 8px 10px;
+  font-size: 1.75rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.resultCard {
+  margin-bottom: 12px;
+  border: 1px solid rgba(135, 156, 198, 0.24);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(4, 22, 48, 0.74);
+}
+
+.resultCard h3 {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px 8px;
+}
+
+.resultRow,
+.detailRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  border-top: 1px solid rgba(135, 156, 198, 0.14);
+}
+
+.resultRow strong {
+  display: block;
+  text-transform: uppercase;
+}
+
+.resultRow b {
+  font-size: 1.35rem;
+}
+
+.winScore {
+  color: #26d757;
+}
+
+.drawScore {
+  color: #ffc226;
+}
+
+.resultRow .statusIcon {
+  width: 34px;
+  height: 34px;
+}
+
+.resultRow .statusIcon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.detailRow {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.detailRow strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detailRow .statusIcon {
+  width: 28px;
+  height: 28px;
+}
+
+.detailRow .statusIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.smallFinals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.infoNote {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(135, 156, 198, 0.18);
+}
+
+.infoNote svg {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  color: #d5deef;
+}
+
+.infoNote p {
+  margin: 0;
+  color: #e5eaf6;
+}
+
+.infoNote strong {
+  color: #ffc226;
+}
+
+@media (max-width: 1280px) {
+  .myTeamPage {
+    grid-template-columns: 1fr;
+  }
+
+  .rightColumn {
+    display: grid;
+    grid-template-columns: 0.75fr 1.25fr;
+    align-items: start;
+  }
+}
+
+@media (max-width: 760px) {
+  .myTeamPage,
+  .rightColumn,
+  .finalSplit,
+  .smallFinals {
+    grid-template-columns: 1fr;
+  }
+
+  .heroPanel,
+  .groupIntro,
+  .checkpointCard,
+  .lockedStage {
+    grid-template-columns: 1fr;
+  }
+
+  .heroPanel {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .timeline {
+    padding-left: 0;
+  }
+
+  .timelineRail,
+  .stadiumMark,
+  .flagNode {
+    display: none;
+  }
+
+  .matchRow {
+    grid-template-columns: 46px minmax(0, 1fr) 48px;
+    padding: 16px;
+  }
+
+  .legend {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:14-bullseye
+    container_name: myworldcup2026-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: worldcup_user
+      POSTGRES_PASSWORD: worldcup_password
+      POSTGRES_DB: worldcup_notes
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
