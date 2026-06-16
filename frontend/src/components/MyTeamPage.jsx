@@ -1,95 +1,23 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './MyTeamPage.module.css';
 import Flag from './Flag';
 import { scheduleMatches } from '../data/scheduleData';
 import {
+  fetchMatchResults,
+  getTeamGroupResults,
+  getGroupStandings,
+  isTeamQualified,
+} from '../services/matchApi';
+import {
   IoChevronDown,
-  IoCheckmark,
-  IoClose,
   IoFlagOutline,
   IoInformationCircleOutline,
   IoLockClosed,
   IoPeople,
-  IoRemove,
+  IoShareSocial,
   IoTrophyOutline,
 } from 'react-icons/io5';
-
-const groupMatches = [
-  {
-    id: 1,
-    title: 'Group Match 1',
-    opponent: 'Brazil',
-    venue: 'BC Place, Vancouver',
-    result: '2 - 0',
-    status: 'advanced',
-  },
-  {
-    id: 2,
-    title: 'Group Match 2',
-    opponent: 'Japan',
-    venue: 'Estadio Azteca, Mexico City',
-    result: '1 - 1',
-    status: 'current',
-  },
-  {
-    id: 3,
-    title: 'Group Match 3',
-    opponent: 'Morocco',
-    venue: 'Lincoln Financial Field, Philadelphia',
-    result: '3 - 1',
-    status: 'advanced',
-  },
-];
-
-const knockoutStages = [
-  'Round of 32',
-  'Round of 16',
-  'Quarter-final',
-  'Semi-final',
-];
-
-const resultSections = [
-  {
-    title: 'Qualification Checkpoint',
-    rows: [
-      ['Position in Group', '2nd'],
-      ['Qualified', 'Yes'],
-    ],
-    qualified: true,
-  },
-  {
-    title: 'Round of 32',
-    rows: [
-      ['Opponent', '-'],
-      ['Date', '-'],
-      ['Result', '-'],
-    ],
-  },
-  {
-    title: 'Round of 16',
-    rows: [
-      ['Opponent', '-'],
-      ['Date', '-'],
-      ['Result', '-'],
-    ],
-  },
-  {
-    title: 'Quarter-final',
-    rows: [
-      ['Opponent', '-'],
-      ['Date', '-'],
-      ['Result', '-'],
-    ],
-  },
-  {
-    title: 'Semi-final',
-    rows: [
-      ['Opponent', '-'],
-      ['Date', '-'],
-      ['Result', '-'],
-    ],
-  },
-];
+import ShareCard from './ShareCard';
 
 function isNationalTeam(value) {
   return value && !/^(?:[123][A-Z]+|W\d+|Winner Match \d+|Loser Match \d+)$/i.test(value);
@@ -123,28 +51,218 @@ function LockedStage({ title }) {
 }
 
 function MyTeamPage() {
-  const [selectedTeam, setSelectedTeam] = useState('United Kingdom');
+  const [selectedTeam, setSelectedTeam] = useState('England');
   const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false);
+  const [matchResults, setMatchResults] = useState({ resultsByMatchNo: {} });
+  const [loading, setLoading] = useState(true);
+  const [showShareCard, setShowShareCard] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadResults = async () => {
+      try {
+        const results = await fetchMatchResults();
+        if (mounted) {
+          setMatchResults(results);
+        }
+      } catch (err) {
+        console.error('Failed to load match results:', err);
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadResults();
+
+    // 每30秒刷新一次数据
+    const interval = setInterval(loadResults, 30000);
+
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
   const nationalTeams = useMemo(() => {
     const teams = scheduleMatches.flatMap((match) => [match.teamA, match.teamB]).filter(isNationalTeam);
-    return ['United Kingdom', ...Array.from(new Set(teams)).sort((a, b) => a.localeCompare(b))];
+    return [...Array.from(new Set(teams)).sort((a, b) => a.localeCompare(b))];
   }, []);
+
+  const teamStats = useMemo(() => {
+    return getTeamGroupResults(selectedTeam, scheduleMatches, matchResults);
+  }, [selectedTeam, matchResults]);
+
+  const groupStandings = useMemo(() => {
+    const groupMatch = scheduleMatches.find(
+      (match) =>
+        match.stage === 'Group Stage' &&
+        (match.teamA === selectedTeam || match.teamB === selectedTeam)
+    );
+    if (!groupMatch) return [];
+    return getGroupStandings(groupMatch.group, scheduleMatches, matchResults);
+  }, [selectedTeam, matchResults]);
+
+  const teamPosition = useMemo(() => {
+    const standing = groupStandings.find((s) => s.team === selectedTeam);
+    return standing ? standing.position : '-';
+  }, [groupStandings, selectedTeam]);
+
+  const qualified = useMemo(() => {
+    return isTeamQualified(selectedTeam, scheduleMatches, matchResults);
+  }, [selectedTeam, matchResults]);
+
+  const teamMatches = useMemo(() => {
+    return scheduleMatches.filter(
+      (match) => match.teamA === selectedTeam || match.teamB === selectedTeam
+    );
+  }, [selectedTeam]);
+
+  const groupMatches = useMemo(() => {
+    const resultsByMatchNo = matchResults?.resultsByMatchNo || {};
+
+    return teamMatches
+      .filter((match) => match.stage === 'Group Stage')
+      .map((match, index) => {
+        const isHome = match.teamA === selectedTeam;
+        const opponent = isHome ? match.teamB : match.teamA;
+        const venue = `${match.stadium}, ${match.city}`;
+        let result = '-';
+        let status = 'scheduled';
+
+        const savedResult = resultsByMatchNo[String(match.matchNo)];
+        if (savedResult && savedResult.result) {
+          const homeScore = savedResult.homeScore;
+          const awayScore = savedResult.awayScore;
+
+          if (homeScore !== null && awayScore !== null) {
+            const myScore = isHome ? homeScore : awayScore;
+            const oppScore = isHome ? awayScore : homeScore;
+            result = `${myScore} - ${oppScore}`;
+
+            if (myScore > oppScore) status = 'advanced';
+            else if (myScore < oppScore) status = 'eliminated';
+            else status = 'current';
+          }
+        } else if (match.result) {
+          const scoreMatch = match.result.match(/(\d+)-(\d+)/);
+          if (scoreMatch) {
+            const homeScore = parseInt(scoreMatch[1], 10);
+            const awayScore = parseInt(scoreMatch[2], 10);
+            const myScore = isHome ? homeScore : awayScore;
+            const oppScore = isHome ? awayScore : homeScore;
+            result = `${myScore} - ${oppScore}`;
+
+            if (myScore > oppScore) status = 'advanced';
+            else if (myScore < oppScore) status = 'eliminated';
+            else status = 'current';
+          }
+        }
+
+        return {
+          id: index + 1,
+          title: `Group Match ${index + 1}`,
+          opponent,
+          venue,
+          result,
+          status,
+          date: match.date,
+          kickoff: match.kickoffET,
+        };
+      });
+  }, [teamMatches, selectedTeam, matchResults]);
+
+  const knockoutStages = [
+    'Round of 32',
+    'Round of 16',
+    'Quarter-final',
+    'Semi-final',
+  ];
+
+  const resultSections = useMemo(() => {
+    const hasPlayed = groupMatches.some((m) => m.status !== 'scheduled');
+    const allCompleted = groupMatches.every((m) => m.status !== 'scheduled');
+
+    return [
+      {
+        title: 'Qualification Checkpoint',
+        rows: [
+          ['Position in Group', hasPlayed ? `${teamPosition}${getOrdinalSuffix(teamPosition)}` : '-'],
+          ['Qualified', allCompleted ? (qualified ? 'Yes' : 'No') : '-'],
+        ],
+        qualified: true,
+      },
+      {
+        title: 'Round of 32',
+        rows: [
+          ['Opponent', '-'],
+          ['Date', '-'],
+          ['Result', '-'],
+        ],
+      },
+      {
+        title: 'Round of 16',
+        rows: [
+          ['Opponent', '-'],
+          ['Date', '-'],
+          ['Result', '-'],
+        ],
+      },
+      {
+        title: 'Quarter-final',
+        rows: [
+          ['Opponent', '-'],
+          ['Date', '-'],
+          ['Result', '-'],
+        ],
+      },
+      {
+        title: 'Semi-final',
+        rows: [
+          ['Opponent', '-'],
+          ['Date', '-'],
+          ['Result', '-'],
+        ],
+      },
+    ];
+  }, [groupMatches, teamPosition, qualified]);
 
   const handleSelectTeam = (team) => {
     setSelectedTeam(team);
     setIsTeamMenuOpen(false);
   };
 
+  const checkpointStatus = useMemo(() => {
+    if (loading) return 'current';
+    const allCompleted = groupMatches.every((m) => m.status !== 'scheduled');
+    if (!allCompleted) return 'current';
+    return qualified ? 'advanced' : 'eliminated';
+  }, [groupMatches, qualified, loading]);
+
   return (
+    <>
     <section className={styles.myTeamPage}>
       <div className={styles.leftColumn}>
         <div className={styles.heroPanel}>
           <div>
             <p>Team Journey</p>
             <h2>Road to the Trophy</h2>
-            <span>Follow your team's path in the World Cup</span>
+            <span>Follow your team&apos;s path in the World Cup</span>
           </div>
-          <IoTrophyOutline className={styles.heroTrophy} />
+          <div className={styles.heroActions}>
+            <button
+              type="button"
+              className={styles.shareBtn}
+              onClick={() => setShowShareCard(true)}
+              aria-label="Share"
+            >
+              <IoShareSocial />
+              <span>Share</span>
+            </button>
+            <IoTrophyOutline className={styles.heroTrophy} />
+          </div>
         </div>
 
         <div className={styles.journeyPanel}>
@@ -169,6 +287,7 @@ function MyTeamPage() {
                     <h3>{match.title}</h3>
                     <p>vs {match.opponent}</p>
                     <span>{match.venue}</span>
+                    <span className={styles.matchDate}>{match.date} {match.kickoff} ET</span>
                   </div>
                   <StatusIcon status={match.status} />
                 </div>
@@ -186,7 +305,7 @@ function MyTeamPage() {
                   <p>Top 2 or Best 8 Third-Place Teams</p>
                   <p>Advance to Round of 32</p>
                 </div>
-                <StatusIcon status="advanced" />
+                <StatusIcon status={checkpointStatus} />
               </div>
             </div>
 
@@ -261,8 +380,9 @@ function MyTeamPage() {
                 <div>
                   <span>Match {match.id}</span>
                   <strong>vs {match.opponent}</strong>
+                  <span className={styles.matchDateSmall}>{match.date}</span>
                 </div>
-                <b className={match.status === 'current' ? styles.drawScore : styles.winScore}>
+                <b className={match.status === 'current' ? styles.drawScore : match.status === 'eliminated' ? styles.loseScore : styles.winScore}>
                   {match.result}
                 </b>
                 <StatusIcon status={match.status} />
@@ -276,7 +396,7 @@ function MyTeamPage() {
               {section.rows.map(([label, value]) => (
                 <div key={label} className={styles.detailRow}>
                   <span>{label}</span>
-                  <strong>{section.qualified && label === 'Qualified' ? <><StatusIcon status="advanced" /> {value}</> : value}</strong>
+                  <strong>{section.qualified && label === 'Qualified' ? <><StatusIcon status={qualified ? 'advanced' : 'eliminated'} /> {value}</> : value}</strong>
                 </div>
               ))}
             </div>
@@ -304,7 +424,28 @@ function MyTeamPage() {
         </div>
       </div>
     </section>
+
+    {showShareCard && (
+      <ShareCard
+        selectedTeam={selectedTeam}
+        groupMatches={groupMatches}
+        checkpointStatus={checkpointStatus}
+        teamPosition={teamPosition}
+        qualified={qualified}
+        onClose={() => setShowShareCard(false)}
+      />
+    )}
+    </>
   );
+}
+
+function getOrdinalSuffix(n) {
+  if (n === '-' || n === null || n === undefined) return '';
+  const num = Number(n);
+  if (Number.isNaN(num)) return '';
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = num % 100;
+  return s[(v - 20) % 10] || s[v] || s[0];
 }
 
 export default MyTeamPage;

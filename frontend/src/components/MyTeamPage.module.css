@@ -64,6 +64,38 @@
   filter: drop-shadow(0 0 16px rgba(244, 181, 63, 0.35));
 }
 
+.heroActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.shareBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid rgba(86, 184, 255, 0.4);
+  border-radius: 8px;
+  background: rgba(86, 184, 255, 0.12);
+  color: #56b8ff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.shareBtn:hover {
+  background: rgba(86, 184, 255, 0.22);
+  border-color: rgba(86, 184, 255, 0.6);
+  box-shadow: 0 0 12px rgba(86, 184, 255, 0.2);
+}
+
+.shareBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
 .journeyPanel {
   padding: 16px 18px 28px;
 }
@@ -527,6 +559,23 @@
 
 .drawScore {
   color: #ffc226;
+}
+
+.loseScore {
+  color: #ec3333;
+}
+
+.matchDate {
+  display: block;
+  margin-top: 4px;
+  color: #8b9bbd;
+  font-size: 0.9rem;
+}
+
+.matchDateSmall {
+  display: block;
+  color: #8b9bbd;
+  font-size: 0.85rem;
 }
 
 .resultRow .statusIcon {
