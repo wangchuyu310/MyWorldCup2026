@@ -11,7 +11,6 @@ import {
 import {
   IoChevronDown,
   IoFlagOutline,
-  IoInformationCircleOutline,
   IoLockClosed,
   IoPeople,
   IoShareSocial,
@@ -486,8 +485,7 @@ function MyTeamPage() {
           </div>
 
           <div className={styles.infoNote}>
-            <IoInformationCircleOutline />
-            <p>The road is tough.<br />But every step brings you closer to glory.<br /><strong>Go {selectedTeam}!</strong></p>
+            <p>The road to the trophy is never just about strength. Every stage is a test of resilience, and champions are those who keep moving forward when the journey gets tough.</p>
           </div>
         </div>
       </div>
