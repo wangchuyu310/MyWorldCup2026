@@ -1,36 +1,67 @@
-import React, { useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
-import Flag from './Flag';
-import StatusIcon from './StatusIcon';
+import { IoCheckmark, IoClose, IoFlag, IoLockClosed, IoRemove, IoTrophy } from 'react-icons/io5';
+import Flag, { getFlagUrl } from './Flag';
 import styles from './ShareCard.module.css';
 
-const defaultCheers = [
-  'Go {team}! Bring the trophy home!',
-  'Believe in {team}! To the finals!',
-  '{team} all the way! No stopping us!',
-  'One team, one dream — {team}!',
-  'Heart of a champion — {team}!',
+const knockoutNodes = [
+  { id: 'round32', label: 'Round of 32' },
+  { id: 'round16', label: 'Round of 16' },
+  { id: 'quarter', label: 'Quarter-final' },
+  { id: 'semi', label: 'Semi-final' },
+  { id: 'bronze', label: 'Bronze Final' },
+  { id: 'final', label: 'Final' },
 ];
 
-function ShareCard({ selectedTeam, groupMatches, checkpointStatus, teamPosition, qualified, onClose }) {
-  const cardRef = useRef(null);
-  const fileInputRef = useRef(null);
-  const [avatarUrl, setAvatarUrl] = useState(null);
-  const [cheerText, setCheerText] = useState(
-    defaultCheers[Math.floor(Math.random() * defaultCheers.length)].replace('{team}', selectedTeam)
+function normalizeNodeStatus(status) {
+  return status === 'scheduled' ? 'locked' : status;
+}
+
+function StatusNodeIcon({ status }) {
+  if (status === 'advanced') return <IoCheckmark />;
+  if (status === 'eliminated') return <IoClose />;
+  if (status === 'current') return <IoRemove />;
+  return <IoLockClosed />;
+}
+
+function JourneyNode({ label, status = 'locked', className = '', children }) {
+  const normalizedStatus = normalizeNodeStatus(status);
+
+  return (
+    <div className={`${styles.journeyNode} ${styles[`node${capitalize(normalizedStatus)}`]} ${className}`}>
+      <div className={styles.nodeCircle}>
+        {children || <StatusNodeIcon status={normalizedStatus} />}
+      </div>
+      <span>{label}</span>
+    </div>
   );
+}
+
+function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
+  const cardRef = useRef(null);
+  const headlineRef = useRef(null);
   const [generating, setGenerating] = useState(false);
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        setAvatarUrl(ev.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  useLayoutEffect(() => {
+    const headline = headlineRef.current;
+    if (!headline) return;
+
+    const fitHeadline = () => {
+      const maxSize = 42;
+      const minSize = 16;
+      let size = maxSize;
+
+      headline.style.fontSize = `${maxSize}px`;
+      while (headline.scrollWidth > headline.clientWidth && size > minSize) {
+        size -= 1;
+        headline.style.fontSize = `${size}px`;
+      }
+    };
+
+    fitHeadline();
+    window.addEventListener('resize', fitHeadline);
+    return () => window.removeEventListener('resize', fitHeadline);
+  }, [selectedTeam]);
 
   const handleGenerate = async () => {
     if (!cardRef.current) return;
@@ -39,7 +70,7 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, teamPosition,
     try {
       const canvas = await html2canvas(cardRef.current, {
         scale: 2,
-        backgroundColor: '#040e22',
+        backgroundColor: null,
         useCORS: true,
         allowTaint: true,
       });
@@ -55,9 +86,11 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, teamPosition,
     }
   };
 
-  const positionText = teamPosition && teamPosition !== '-'
-    ? `${teamPosition}${getOrdinalSuffix(teamPosition)} in Group`
-    : 'Group Stage';
+  const roundOf32Status = checkpointStatus === 'advanced' ? 'current' : 'locked';
+  const selectedFlagUrl = getFlagUrl(selectedTeam);
+  const flagTileStyle = selectedFlagUrl
+    ? { '--team-flag-url': `url("${selectedFlagUrl}")` }
+    : undefined;
 
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -69,110 +102,110 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, teamPosition,
 
         <div className={styles.cardWrapper}>
           <div ref={cardRef} className={styles.shareCard}>
-            <div className={styles.cardBg} />
+            <div className={styles.cardBg} style={flagTileStyle} />
             <div className={styles.cardBgAccent} />
+            <div className={styles.confetti} />
 
-            <div className={styles.cardHeader}>
-              <div className={styles.avatarArea}>
-                <div className={styles.avatarCircle}>
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt="avatar" className={styles.avatarImg} />
-                  ) : (
-                    <Flag country={selectedTeam} compact className={styles.avatarFlag} />
-                  )}
+            <div className={styles.posterHeader}>
+              <div className={styles.posterBrand}>
+                <IoTrophy />
+                <span>FIFA World Cup 2026™</span>
+              </div>
+
+              <div className={styles.posterTeamRow}>
+                <div className={styles.crest}>
+                  <Flag country={selectedTeam} compact className={styles.crestFlag} />
                 </div>
-                <span className={styles.avatarLabel}>ME</span>
-              </div>
-              <div className={styles.cardTitle}>
-                <span className={styles.cardSubtitle}>FIFA World Cup 2026™</span>
-                <h1>{selectedTeam}</h1>
-                <span className={styles.cardPositionText}>{positionText}</span>
-              </div>
-              <div className={styles.cardFlagLarge}>
-                <Flag country={selectedTeam} compact className={styles.cardFlagImg} />
+                <div className={styles.posterTitle}>
+                  <strong ref={headlineRef}>Go {selectedTeam}!</strong>
+                </div>
               </div>
             </div>
 
-            <div className={styles.cardDivider} />
+            <div className={styles.posterJourney}>
+              <svg className={styles.journeyPath} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <marker id="shareArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" />
+                  </marker>
+                </defs>
+                <path
+                  className={styles.pathGlow}
+                  d="M 8 12 L 31 12 L 58 12 L 86 12 C 96 12 97 25 84 34 C 74 37 63 39 51 43 C 35 47 20 51 15 58 C 9 67 20 75 30 77 C 40 79 48 82 55 82"
+                />
+                <path
+                  className={styles.pathDash}
+                  d="M 8 12 L 31 12 L 58 12 L 86 12 C 96 12 97 25 84 34 C 74 37 63 39 51 43 C 35 47 20 51 15 58 C 9 67 20 75 30 77 C 40 79 48 82 55 82"
+                  markerEnd="url(#shareArrow)"
+                />
+                <path
+                  className={styles.pathGlow}
+                  d="M 55 82 C 65 74 75 70 86 72"
+                />
+                <path
+                  className={styles.pathDash}
+                  d="M 55 82 C 65 74 75 70 86 72"
+                  markerEnd="url(#shareArrow)"
+                />
+                <path
+                  className={styles.pathGlow}
+                  d="M 55 82 C 66 86 77 91 88 92"
+                />
+                <path
+                  className={styles.pathDash}
+                  d="M 55 82 C 66 86 77 91 88 92"
+                  markerEnd="url(#shareArrow)"
+                />
+              </svg>
 
-            <div className={styles.cardBody}>
-              <div className={styles.cardStageLabel}>
-                <span className={styles.stageIcon}>⚽</span>
-                <span>GROUP STAGE</span>
-                {checkpointStatus === 'advanced' && (
-                  <span className={styles.qualifiedBadge}>✓ QUALIFIED</span>
-                )}
-                {checkpointStatus === 'eliminated' && (
-                  <span className={styles.eliminatedBadge}>✗ OUT</span>
-                )}
-                {checkpointStatus === 'locked' && (
-                  <span className={styles.pendingBadge}>⏳ IN PROGRESS</span>
-                )}
-              </div>
+              <JourneyNode label="Start" status="current" className={styles.startNode}>
+                <Flag country={selectedTeam} compact className={styles.startFlag} />
+              </JourneyNode>
 
-              <div className={styles.cardMatches}>
+              <div className={styles.groupNodeRow}>
                 {groupMatches.map((match) => (
-                  <div key={match.id} className={styles.cardMatch}>
-                    <div className={styles.cardMatchLeft}>
-                      <span className={styles.cardMatchNum}>{match.id}</span>
-                      <span className={styles.cardVs}>vs</span>
-                      <span className={styles.cardMatchOpp}>{match.opponent}</span>
-                    </div>
-                    <div className={styles.cardMatchRight}>
-                      <span className={`${styles.cardMatchScore} ${
-                        match.status === 'advanced' ? styles.scoreWin :
-                        match.status === 'eliminated' ? styles.scoreLose :
-                        match.status === 'current' ? styles.scoreDraw :
-                        styles.scorePending
-                      }`}>
-                        {match.result}
-                      </span>
-                      <StatusIcon status={match.status} />
-                    </div>
-                  </div>
+                  <JourneyNode
+                    key={match.id}
+                    label={`Group Match ${match.id}`}
+                    status={match.status}
+                  />
                 ))}
               </div>
+
+              <div className={styles.checkpointNode}>
+                <JourneyNode label="Qualification Checkpoint" status={checkpointStatus}>
+                  <IoFlag />
+                </JourneyNode>
+              </div>
+
+              <div className={styles.roundNode}>
+                <JourneyNode label="Round of 32" status={roundOf32Status}>
+                  {roundOf32Status === 'current' ? (
+                    <Flag country={selectedTeam} compact className={styles.roundFlag} />
+                  ) : null}
+                </JourneyNode>
+              </div>
+
+              <div className={styles.knockoutGrid}>
+                {knockoutNodes.slice(1).map((node) => (
+                  <JourneyNode key={node.id} label={node.label} status="locked" />
+                ))}
+              </div>
+
+              <div className={styles.trophyColumn} aria-hidden="true">
+                <IoTrophy className={styles.bronzeTrophy} />
+                <IoTrophy className={styles.silverTrophy} />
+                <IoTrophy className={styles.goldTrophy} />
+              </div>
             </div>
 
-            <div className={styles.cheerSection}>
-              <span className={styles.megaphone}>📢</span>
-              <span className={styles.cheerText}>{cheerText || `Go ${selectedTeam}!`}</span>
-            </div>
-
-            <div className={styles.cardFooter}>
-              <span className={styles.footerLogo}>🏆</span>
-              <span>MyWorldCup2026</span>
-              <span className={styles.footerDot}>·</span>
-              <span>Road to Glory</span>
+            <div className={styles.posterFooter}>
+              <span>© 2026 JustForFunLab. All rights reserved.</span>
             </div>
           </div>
         </div>
 
         <div className={styles.controls}>
-          <div className={styles.controlRow}>
-            <label className={styles.uploadBtn}>
-              📷 Change Avatar
-              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarChange} className={styles.hiddenInput} />
-            </label>
-            {avatarUrl && (
-              <button type="button" className={styles.removeBtn} onClick={() => { setAvatarUrl(null); if (fileInputRef.current) fileInputRef.current.value = ''; }}>
-                Reset
-              </button>
-            )}
-          </div>
-
-          <div className={styles.controlRow}>
-            <span className={styles.megaphoneLabel}>📢</span>
-            <input
-              type="text"
-              placeholder="Type your cheer..."
-              value={cheerText}
-              onChange={(e) => setCheerText(e.target.value)}
-              className={styles.cheerInput}
-              maxLength={50}
-            />
-          </div>
-
           <button
             type="button"
             className={styles.generateBtn}
@@ -187,13 +220,9 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, teamPosition,
   );
 }
 
-function getOrdinalSuffix(n) {
-  if (n === '-' || n === null || n === undefined) return '';
-  const num = Number(n);
-  if (Number.isNaN(num)) return '';
-  const s = ['th', 'st', 'nd', 'rd'];
-  const v = num % 100;
-  return s[(v - 20) % 10] || s[v] || s[0];
+function capitalize(value) {
+  if (!value) return '';
+  return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 export default ShareCard;

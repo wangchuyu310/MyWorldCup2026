@@ -72,6 +72,11 @@ const flagCodeMap = {
   'Wales': 'gb-wls',
 };
 
+export function getFlagUrl(country) {
+  const flagCode = flagCodeMap[country];
+  return flagCode ? `https://flagcdn.com/${flagCode}.svg` : null;
+}
+
 function getFallbackLabel(country) {
   if (!country) return '?';
   return country
@@ -83,18 +88,18 @@ function getFallbackLabel(country) {
 }
 
 function Flag({ country, compact = false, className = '', style }) {
-  const flagCode = flagCodeMap[country];
+  const flagUrl = getFlagUrl(country);
 
   return (
     <span
-      className={`${styles.flag} ${compact ? styles.compact : ''} ${flagCode ? '' : styles.placeholder} ${className}`}
+      className={`${styles.flag} ${compact ? styles.compact : ''} ${flagUrl ? '' : styles.placeholder} ${className}`}
       aria-label={`${country} flag`}
       style={style}
       title={country}
     >
-      {flagCode ? (
+      {flagUrl ? (
         <img
-          src={`https://flagcdn.com/${flagCode}.svg`}
+          src={flagUrl}
           alt=""
           className={styles.image}
           loading="lazy"
