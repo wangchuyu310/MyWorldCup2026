@@ -105,7 +105,7 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, teamPosition,
                 {checkpointStatus === 'eliminated' && (
                   <span className={styles.eliminatedBadge}>✗ OUT</span>
                 )}
-                {checkpointStatus === 'current' && (
+                {checkpointStatus === 'locked' && (
                   <span className={styles.pendingBadge}>⏳ IN PROGRESS</span>
                 )}
               </div>

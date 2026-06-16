@@ -293,6 +293,24 @@
   transform: translateY(-50%);
 }
 
+.flagNodeLocked {
+  background: #ffffff;
+  border-color: #dce5f2;
+  box-shadow: 0 0 18px rgba(220, 229, 242, 0.45);
+}
+
+.flagNodeAdvanced {
+  background: #28a745;
+  border-color: #78d22d;
+  box-shadow: 0 0 22px rgba(120, 210, 45, 0.55);
+}
+
+.flagNodeEliminated {
+  background: #ec3333;
+  border-color: #ff6b6b;
+  box-shadow: 0 0 22px rgba(236, 51, 51, 0.52);
+}
+
 .checkpointCard {
   display: grid;
   grid-template-columns: 46px minmax(0, 1fr) 56px;
@@ -330,7 +348,8 @@
 }
 
 .stageIcon,
-.lockIcon {
+.lockIcon,
+.outcomeIcon {
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -352,6 +371,28 @@
   width: 46px;
   height: 46px;
   color: #aeb8cb;
+}
+
+.outcomeIcon {
+  width: 46px;
+  height: 46px;
+  border: 0;
+  background: transparent;
+}
+
+.outcomeIcon > * {
+  width: 46px;
+  height: 46px;
+}
+
+.outcomeIcon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.outcomeIcon .lockedValue {
+  width: 46px;
+  height: 46px;
 }
 
 .finalSplit {
@@ -606,6 +647,22 @@
 .detailRow .statusIcon svg {
   width: 20px;
   height: 20px;
+}
+
+.lockedValue {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(221, 229, 244, 0.48);
+  border-radius: 50%;
+  background: rgba(8, 19, 40, 0.7);
+  color: #aeb8cb;
+}
+
+.lockedValue svg {
+  width: 16px;
+  height: 16px;
 }
 
 .smallFinals {

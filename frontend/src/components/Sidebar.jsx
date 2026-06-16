@@ -1,11 +1,10 @@
 import React from 'react';
 import styles from './Sidebar.module.css';
-import { IoCalendarOutline, IoShieldOutline, IoStarOutline, IoListOutline } from 'react-icons/io5';
+import { IoCalendarOutline, IoShieldOutline, IoListOutline } from 'react-icons/io5';
 
 const navItems = [
   { id: 'today', label: 'Today', Icon: IoCalendarOutline },
   { id: 'my-team', label: 'My Team', Icon: IoShieldOutline },
-  { id: 'my-star', label: 'My Star', Icon: IoStarOutline },
   { id: 'schedule', label: 'Schedule', Icon: IoListOutline },
 ];
 

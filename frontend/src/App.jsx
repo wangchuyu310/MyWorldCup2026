@@ -7,7 +7,6 @@ import FeaturedMatches from './components/FeaturedMatches';
 import UpcomingMatches from './components/UpcomingMatches';
 import CallToAction from './components/CallToAction';
 import MyTeamPage from './components/MyTeamPage';
-import MyStarPage from './components/MyStarPage';
 import SchedulePage from './components/SchedulePage';
 import { scheduleMatches as liveScheduleMatches } from './data/liveSchedule';
 
@@ -179,8 +178,6 @@ function App() {
         <main className="main-content" ref={mainContentRef}>
           {activePage === 'my-team' ? (
             <MyTeamPage />
-          ) : activePage === 'my-star' ? (
-            <MyStarPage />
           ) : activePage === 'schedule' ? (
             <SchedulePage />
           ) : (

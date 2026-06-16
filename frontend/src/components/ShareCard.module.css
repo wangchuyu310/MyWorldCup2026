@@ -5,15 +5,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 16px;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
 }
 
 .modal {
-  width: 90vw;
-  max-width: 480px;
-  max-height: 90vh;
-  overflow-y: auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(96vw, 560px);
+  max-height: calc(100vh - 32px);
+  overflow: hidden;
   border-radius: 14px;
   background: linear-gradient(145deg, #0a1628, #06101f);
   border: 1px solid rgba(135, 156, 198, 0.25);
@@ -55,11 +57,17 @@
 }
 
 .cardWrapper {
-  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 14px 16px 10px;
+  overflow: hidden;
 }
 
 .shareCard {
   position: relative;
+  width: min(100%, 500px);
   overflow: hidden;
   border-radius: 12px;
   border: 1px solid rgba(135, 156, 198, 0.2);
@@ -355,15 +363,25 @@
 }
 
 .controls {
-  padding: 16px 22px 20px;
   display: grid;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px 12px;
+  padding: 12px 18px 16px;
+  border-top: 1px solid rgba(135, 156, 198, 0.16);
 }
 
 .controlRow {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.controlRow:first-child {
+  grid-column: 1;
+}
+
+.controlRow:nth-child(2) {
+  grid-column: 1;
 }
 
 .uploadBtn {
@@ -427,6 +445,9 @@
 }
 
 .generateBtn {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: stretch;
   padding: 12px 20px;
   border: 0;
   border-radius: 10px;
@@ -448,4 +469,107 @@
 .generateBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+@media (max-height: 820px) {
+  .modalHeader {
+    padding: 12px 16px;
+  }
+
+  .modalHeader h2 {
+    font-size: 1.05rem;
+  }
+
+  .closeBtn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .cardWrapper {
+    padding: 10px 12px 8px;
+  }
+
+  .cardHeader {
+    padding: 14px 16px 9px;
+  }
+
+  .avatarCircle {
+    width: 52px;
+    height: 52px;
+    border-width: 2px;
+  }
+
+  .avatarFlag {
+    width: 40px !important;
+  }
+
+  .cardTitle h1 {
+    font-size: 1.25rem;
+  }
+
+  .cardFlagImg {
+    width: 48px !important;
+  }
+
+  .cardBody {
+    padding: 10px 16px 10px;
+  }
+
+  .cardStageLabel {
+    margin-bottom: 8px;
+    font-size: 0.75rem;
+  }
+
+  .cardMatch {
+    padding: 7px 10px;
+  }
+
+  .cardMatchNum {
+    width: 22px;
+    height: 22px;
+  }
+
+  .cardMatchOpp {
+    font-size: 0.82rem;
+  }
+
+  .cardMatchScore {
+    font-size: 0.95rem;
+  }
+
+  .cheerSection {
+    margin: 0 16px 9px;
+    padding: 8px 12px;
+  }
+
+  .cardFooter {
+    padding: 8px 16px;
+  }
+
+  .controls {
+    padding: 10px 14px 12px;
+  }
+
+  .uploadBtn,
+  .cheerInput {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+}
+
+@media (max-width: 560px) {
+  .modal {
+    width: calc(100vw - 24px);
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .controlRow:first-child,
+  .controlRow:nth-child(2),
+  .generateBtn {
+    grid-column: 1;
+    grid-row: auto;
+  }
 }

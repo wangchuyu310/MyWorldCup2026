@@ -19,8 +19,32 @@ import {
 } from 'react-icons/io5';
 import ShareCard from './ShareCard';
 
+const LOCKED_VALUE = { locked: true };
+
 function isNationalTeam(value) {
   return value && !/^(?:[123][A-Z]+|W\d+|Winner Match \d+|Loser Match \d+)$/i.test(value);
+}
+
+function hasCompletedMatchResult(match, resultsByMatchNo) {
+  const savedResult = resultsByMatchNo[String(match.matchNo)];
+  if (
+    savedResult &&
+    savedResult.homeScore !== null &&
+    savedResult.homeScore !== undefined &&
+    savedResult.awayScore !== null &&
+    savedResult.awayScore !== undefined
+  ) {
+    return true;
+  }
+
+  return Boolean(match.result && /\d+\s*-\s*\d+/.test(match.result));
+}
+
+function areAllGroupStageMatchesComplete(matches, matchResults) {
+  const resultsByMatchNo = matchResults?.resultsByMatchNo || {};
+  return matches
+    .filter((match) => match.stage === 'Group Stage')
+    .every((match) => hasCompletedMatchResult(match, resultsByMatchNo));
 }
 
 import StatusIcon from './StatusIcon';
@@ -47,6 +71,22 @@ function LockedStage({ title }) {
         <IoLockClosed />
       </span>
     </div>
+  );
+}
+
+function LockedValue({ label = 'Locked until match is played' }) {
+  return (
+    <span className={styles.lockedValue} aria-label={label} title={label}>
+      <IoLockClosed />
+    </span>
+  );
+}
+
+function OutcomeIcon({ status, className = '' }) {
+  return (
+    <span className={`${styles.outcomeIcon} ${className}`}>
+      {status === 'locked' ? <LockedValue label="Qualification has not been decided" /> : <StatusIcon status={status} />}
+    </span>
   );
 }
 
@@ -174,6 +214,23 @@ function MyTeamPage() {
       });
   }, [teamMatches, selectedTeam, matchResults]);
 
+  const qualificationStatus = useMemo(() => {
+    if (loading || groupMatches.length === 0) return 'locked';
+
+    const ownGroupComplete = groupMatches.every((match) => match.status !== 'scheduled');
+    if (!ownGroupComplete) return 'locked';
+
+    const numericPosition = Number(teamPosition);
+    if (!Number.isFinite(numericPosition)) return 'locked';
+    if (numericPosition <= 2) return 'advanced';
+    if (numericPosition >= 4) return 'eliminated';
+
+    const allGroupStageComplete = areAllGroupStageMatchesComplete(scheduleMatches, matchResults);
+    if (!allGroupStageComplete) return 'locked';
+
+    return qualified ? 'advanced' : 'eliminated';
+  }, [groupMatches, loading, matchResults, qualified, teamPosition]);
+
   const knockoutStages = [
     'Round of 32',
     'Round of 16',
@@ -182,52 +239,58 @@ function MyTeamPage() {
   ];
 
   const resultSections = useMemo(() => {
-    const hasPlayed = groupMatches.some((m) => m.status !== 'scheduled');
     const allCompleted = groupMatches.every((m) => m.status !== 'scheduled');
+    const qualificationDecided = qualificationStatus !== 'locked';
 
     return [
       {
         title: 'Qualification Checkpoint',
         rows: [
-          ['Position in Group', hasPlayed ? `${teamPosition}${getOrdinalSuffix(teamPosition)}` : '-'],
-          ['Qualified', allCompleted ? (qualified ? 'Yes' : 'No') : '-'],
+          ['Position in Group', allCompleted ? `${teamPosition}${getOrdinalSuffix(teamPosition)}` : LOCKED_VALUE],
+          ['Qualified', qualificationDecided ? (qualified ? 'Yes' : 'No') : LOCKED_VALUE],
         ],
         qualified: true,
+        status: qualificationStatus,
+        locked: !qualificationDecided,
       },
       {
         title: 'Round of 32',
         rows: [
-          ['Opponent', '-'],
-          ['Date', '-'],
-          ['Result', '-'],
+          ['Opponent', LOCKED_VALUE],
+          ['Date', LOCKED_VALUE],
+          ['Result', LOCKED_VALUE],
         ],
+        locked: true,
       },
       {
         title: 'Round of 16',
         rows: [
-          ['Opponent', '-'],
-          ['Date', '-'],
-          ['Result', '-'],
+          ['Opponent', LOCKED_VALUE],
+          ['Date', LOCKED_VALUE],
+          ['Result', LOCKED_VALUE],
         ],
+        locked: true,
       },
       {
         title: 'Quarter-final',
         rows: [
-          ['Opponent', '-'],
-          ['Date', '-'],
-          ['Result', '-'],
+          ['Opponent', LOCKED_VALUE],
+          ['Date', LOCKED_VALUE],
+          ['Result', LOCKED_VALUE],
         ],
+        locked: true,
       },
       {
         title: 'Semi-final',
         rows: [
-          ['Opponent', '-'],
-          ['Date', '-'],
-          ['Result', '-'],
+          ['Opponent', LOCKED_VALUE],
+          ['Date', LOCKED_VALUE],
+          ['Result', LOCKED_VALUE],
         ],
+        locked: true,
       },
     ];
-  }, [groupMatches, teamPosition, qualified]);
+  }, [groupMatches, qualificationStatus, teamPosition, qualified]);
 
   const handleSelectTeam = (team) => {
     setSelectedTeam(team);
@@ -235,11 +298,8 @@ function MyTeamPage() {
   };
 
   const checkpointStatus = useMemo(() => {
-    if (loading) return 'current';
-    const allCompleted = groupMatches.every((m) => m.status !== 'scheduled');
-    if (!allCompleted) return 'current';
-    return qualified ? 'advanced' : 'eliminated';
-  }, [groupMatches, qualified, loading]);
+    return qualificationStatus;
+  }, [qualificationStatus]);
 
   return (
     <>
@@ -289,13 +349,13 @@ function MyTeamPage() {
                     <span>{match.venue}</span>
                     <span className={styles.matchDate}>{match.date} {match.kickoff} ET</span>
                   </div>
-                  <StatusIcon status={match.status} />
+                  <OutcomeIcon status={match.status === 'scheduled' ? 'locked' : match.status} />
                 </div>
               ))}
             </div>
 
             <div className={styles.checkpoint}>
-              <span className={styles.flagNode}>
+              <span className={`${styles.flagNode} ${styles[`flagNode${checkpointStatus.charAt(0).toUpperCase()}${checkpointStatus.slice(1)}`]}`}>
                 <Flag country={selectedTeam} compact className={styles.checkpointFlag} />
               </span>
               <div className={styles.checkpointCard}>
@@ -305,7 +365,7 @@ function MyTeamPage() {
                   <p>Top 2 or Best 8 Third-Place Teams</p>
                   <p>Advance to Round of 32</p>
                 </div>
-                <StatusIcon status={checkpointStatus} />
+                <OutcomeIcon status={checkpointStatus} />
               </div>
             </div>
 
@@ -383,20 +443,28 @@ function MyTeamPage() {
                   <span className={styles.matchDateSmall}>{match.date}</span>
                 </div>
                 <b className={match.status === 'current' ? styles.drawScore : match.status === 'eliminated' ? styles.loseScore : styles.winScore}>
-                  {match.result}
+                  {match.status === 'scheduled' ? <LockedValue /> : match.result}
                 </b>
-                <StatusIcon status={match.status} />
+                {match.status === 'scheduled' ? <LockedValue /> : <StatusIcon status={match.status} />}
               </div>
             ))}
           </div>
 
           {resultSections.map((section) => (
             <div key={section.title} className={styles.resultCard}>
-              <h3>{section.title}<span>-</span></h3>
+              <h3>{section.title}<span>{section.status ? <OutcomeIcon status={section.status} /> : section.locked ? <LockedValue /> : null}</span></h3>
               {section.rows.map(([label, value]) => (
                 <div key={label} className={styles.detailRow}>
                   <span>{label}</span>
-                  <strong>{section.qualified && label === 'Qualified' ? <><StatusIcon status={qualified ? 'advanced' : 'eliminated'} /> {value}</> : value}</strong>
+                  <strong>
+                    {value === LOCKED_VALUE ? (
+                      <LockedValue />
+                    ) : section.qualified && label === 'Qualified' ? (
+                      <><OutcomeIcon status={section.status} /> {value}</>
+                    ) : (
+                      value
+                    )}
+                  </strong>
                 </div>
               ))}
             </div>
@@ -404,16 +472,16 @@ function MyTeamPage() {
 
           <div className={styles.smallFinals}>
             <div className={styles.resultCard}>
-              <h3>Final <span>-</span></h3>
-              <div className={styles.detailRow}><span>Opponent</span><strong>-</strong></div>
-              <div className={styles.detailRow}><span>Date</span><strong>-</strong></div>
-              <div className={styles.detailRow}><span>Result</span><strong>-</strong></div>
+              <h3>Final <span><LockedValue /></span></h3>
+              <div className={styles.detailRow}><span>Opponent</span><strong><LockedValue /></strong></div>
+              <div className={styles.detailRow}><span>Date</span><strong><LockedValue /></strong></div>
+              <div className={styles.detailRow}><span>Result</span><strong><LockedValue /></strong></div>
             </div>
             <div className={styles.resultCard}>
-              <h3>Bronze Final <span>-</span></h3>
-              <div className={styles.detailRow}><span>Opponent</span><strong>-</strong></div>
-              <div className={styles.detailRow}><span>Date</span><strong>-</strong></div>
-              <div className={styles.detailRow}><span>Result</span><strong>-</strong></div>
+              <h3>Bronze Final <span><LockedValue /></span></h3>
+              <div className={styles.detailRow}><span>Opponent</span><strong><LockedValue /></strong></div>
+              <div className={styles.detailRow}><span>Date</span><strong><LockedValue /></strong></div>
+              <div className={styles.detailRow}><span>Result</span><strong><LockedValue /></strong></div>
             </div>
           </div>
 
