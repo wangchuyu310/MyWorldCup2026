@@ -8,6 +8,7 @@ node_modules/
 dist/
 frontend/dist/
 backend/dist/
+backend/cache/
 
 # local env files
 .env

@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './SchedulePage.module.css';
 import { IoCalendarOutline, IoLocationOutline, IoSearchOutline, IoTimeOutline, IoTrophyOutline } from 'react-icons/io5';
 import { scheduleMatches, scheduleSummary } from '../data/scheduleData';
 
 const allValue = 'All';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 function formatDate(value) {
   const date = new Date(`${value}T00:00:00`);
@@ -19,14 +20,76 @@ function SchedulePage() {
   const [stageFilter, setStageFilter] = useState(allValue);
   const [regionFilter, setRegionFilter] = useState(allValue);
   const [searchTerm, setSearchTerm] = useState('');
+  const [manualResults, setManualResults] = useState({
+    loading: true,
+    lastUpdatedAt: null,
+    resultsByMatchNo: {},
+    message: '',
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchResults = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/schedule/manual-results`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Unable to load saved results');
+        }
+
+        if (isMounted) {
+          setManualResults({
+            loading: false,
+            lastUpdatedAt: data.lastUpdatedAt || null,
+            resultsByMatchNo: data.resultsByMatchNo || {},
+            message: '',
+          });
+        }
+      } catch (error) {
+        if (isMounted) {
+          setManualResults((current) => ({
+            ...current,
+            loading: false,
+            message: error.message,
+          }));
+        }
+      }
+    };
+
+    fetchResults();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const stages = useMemo(() => [allValue, ...new Set(scheduleMatches.map((match) => match.stage))], []);
   const regions = useMemo(() => [allValue, ...new Set(scheduleMatches.map((match) => match.region))], []);
 
+  const matchesWithResults = useMemo(() => {
+    return scheduleMatches.map((match) => {
+      const manualResult = manualResults.resultsByMatchNo[String(match.matchNo)];
+
+      if (!manualResult?.result) {
+        return match;
+      }
+
+      return {
+        ...match,
+        result: manualResult.result,
+        resultStatus: manualResult.updatedAt
+          ? `Updated ${new Date(manualResult.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+          : 'Backend file',
+      };
+    });
+  }, [manualResults.resultsByMatchNo]);
+
   const filteredMatches = useMemo(() => {
     const search = searchTerm.trim().toLowerCase();
 
-    return scheduleMatches.filter((match) => {
+    return matchesWithResults.filter((match) => {
       const stageMatches = stageFilter === allValue || match.stage === stageFilter;
       const regionMatches = regionFilter === allValue || match.region === regionFilter;
       const searchable = [
@@ -46,7 +109,15 @@ function SchedulePage() {
 
       return stageMatches && regionMatches && (!search || searchable.includes(search));
     });
-  }, [regionFilter, searchTerm, stageFilter]);
+  }, [matchesWithResults, regionFilter, searchTerm, stageFilter]);
+
+  const resultStatusLabel = manualResults.loading
+    ? 'Loading saved results...'
+    : manualResults.message
+      ? manualResults.message
+      : manualResults.lastUpdatedAt
+      ? `Manual results updated ${new Date(manualResults.lastUpdatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+      : 'Results read from backend/data/matchResults.js';
 
   const firstMatch = scheduleMatches[0];
   const finalMatch = scheduleMatches[scheduleMatches.length - 1];
@@ -132,6 +203,7 @@ function SchedulePage() {
             {regions.map((region) => <option key={region} value={region}>{region}</option>)}
           </select>
           <span>{filteredMatches.length} matches</span>
+          <small className={!manualResults.message ? styles.syncReady : styles.syncMuted}>{resultStatusLabel}</small>
         </div>
 
         <div className={styles.tableWrap}>
@@ -164,7 +236,12 @@ function SchedulePage() {
                   </td>
                   <td><strong>{match.stadium}</strong><span>{match.city}, {match.country}</span></td>
                   <td>{match.region}</td>
-                  <td>{match.result || '-'}</td>
+                  <td>
+                    <strong className={match.result ? styles.resultValue : styles.emptyResult}>
+                      {match.result || '-'}
+                    </strong>
+                    {match.resultStatus && <small>{match.resultStatus}</small>}
+                  </td>
                 </tr>
               ))}
             </tbody>

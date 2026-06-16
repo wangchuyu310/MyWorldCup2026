@@ -1,110 +1,108 @@
 import styles from './Flag.module.css';
 
-const countryClassMap = {
-  // 已有国家
-  'United States': styles.usa,
-  'USA': styles.usa,
-  'Mexico': styles.mexico,
-  'Argentina': styles.argentina,
-  'Canada': styles.canada,
-  'Brazil': styles.brazil,
-  'France': styles.france,
-  'England': styles.england,
-  'Germany': styles.germany,
-  
-  // 新增国家 - A组
-  'South Africa': styles.southAfrica,
-  'Korea Republic': styles.koreaRepublic,
-  'South Korea': styles.koreaRepublic,
-  'Czechia': styles.czechia,
-  'Czech Republic': styles.czechia,
-  
-  // B组
-  'Bosnia and Herzegovina': styles.bosnia,
-  'Bosnia-Herzegovina': styles.bosnia,
-  'Netherlands': styles.netherlands,
-  'Chile': styles.chile,
-  'Qatar': styles.qatar,
-  'Switzerland': styles.switzerland,
-  
-  // C组
-  'Spain': styles.spain,
-  'New Zealand': styles.newZealand,
-  'Colombia': styles.colombia,
-  'Scotland': styles.scotland,
-  'Haiti': styles.haiti,
-  'Morocco': styles.morocco,
-  
-  // D组
-  'Paraguay': styles.paraguay,
-  'Australia': styles.australia,
-  'Türkiye': styles.turkiye,
-  'Turkey': styles.turkiye,
-  
-  // E组
-  "Côte d'Ivoire": styles.coteDIvoire,
-  'Ivory Coast': styles.coteDIvoire,
-  'Ecuador': styles.ecuador,
-  'Curaçao': styles.curacao,
-  'Curacao': styles.curacao,
-  
-  // F组
-  'Sweden': styles.sweden,
-  'Tunisia': styles.tunisia,
-  'Japan': styles.japan,
-  
-  // G组
-  'IR Iran': styles.iran,
-  'Iran': styles.iran,
-  'Belgium': styles.belgium,
-  'Egypt': styles.egypt,
-  
-  // H组
-  'Saudi Arabia': styles.saudiArabia,
-  'Uruguay': styles.uruguay,
-  'Cabo Verde': styles.caboVerde,
-  'Cape Verde': styles.caboVerde,
-  
-  // I组
-  'Senegal': styles.senegal,
-  'Iraq': styles.iraq,
-  'Norway': styles.norway,
-  
-  // J组
-  'Algeria': styles.algeria,
-  'Austria': styles.austria,
-  'Jordan': styles.jordan,
-  
-  // K组
-  'Portugal': styles.portugal,
-  'Congo DR': styles.congoDR,
-  'DR Congo': styles.congoDR,
-  'Uzbekistan': styles.uzbekistan,
-  
-  // L组
-  'Ghana': styles.ghana,
-  'Panama': styles.panama,
-  'Croatia': styles.croatia,
-  
-  // 其他可能名称
-  'Korea DPR': styles.koreaRepublic,
-  'North Korea': styles.koreaRepublic,
-  'Russia': styles.russia,
-  'Italy': styles.italy,
-  'Wales': styles.wales,
-  'Ukraine': styles.ukraine,
-  'Poland': styles.poland,
-  'Denmark': styles.denmark,
-  'Serbia': styles.serbia,
+const flagCodeMap = {
+  'Algeria': 'dz',
+  'Argentina': 'ar',
+  'Australia': 'au',
+  'Austria': 'at',
+  'Belgium': 'be',
+  'Bosnia and Herzegovina': 'ba',
+  'Bosnia-Herzegovina': 'ba',
+  'Brazil': 'br',
+  'Cabo Verde': 'cv',
+  'Cape Verde': 'cv',
+  'Canada': 'ca',
+  'Chile': 'cl',
+  'Colombia': 'co',
+  'Congo DR': 'cd',
+  'Côte d’Ivoire': 'ci',
+  "Côte d'Ivoire": 'ci',
+  'Curacao': 'cw',
+  'Curaçao': 'cw',
+  'Czech Republic': 'cz',
+  'Czechia': 'cz',
+  'Denmark': 'dk',
+  'DR Congo': 'cd',
+  'Ecuador': 'ec',
+  'Egypt': 'eg',
+  'England': 'gb-eng',
+  'France': 'fr',
+  'Germany': 'de',
+  'Ghana': 'gh',
+  'Haiti': 'ht',
+  'IR Iran': 'ir',
+  'Iran': 'ir',
+  'Iraq': 'iq',
+  'Italy': 'it',
+  'Ivory Coast': 'ci',
+  'Japan': 'jp',
+  'Jordan': 'jo',
+  'Korea DPR': 'kp',
+  'Korea Republic': 'kr',
+  'Mexico': 'mx',
+  'Morocco': 'ma',
+  'Netherlands': 'nl',
+  'New Zealand': 'nz',
+  'North Korea': 'kp',
+  'Norway': 'no',
+  'Panama': 'pa',
+  'Paraguay': 'py',
+  'Poland': 'pl',
+  'Portugal': 'pt',
+  'Qatar': 'qa',
+  'Russia': 'ru',
+  'Saudi Arabia': 'sa',
+  'Scotland': 'gb-sct',
+  'Senegal': 'sn',
+  'Serbia': 'rs',
+  'South Africa': 'za',
+  'South Korea': 'kr',
+  'Spain': 'es',
+  'Sweden': 'se',
+  'Switzerland': 'ch',
+  'Tunisia': 'tn',
+  'Turkey': 'tr',
+  'Türkiye': 'tr',
+  'Ukraine': 'ua',
+  'United Kingdom': 'gb',
+  'United States': 'us',
+  'Uruguay': 'uy',
+  'USA': 'us',
+  'Uzbekistan': 'uz',
+  'Wales': 'gb-wls',
 };
 
-function Flag({ country, compact = false }) {
-  const countryClass = countryClassMap[country] || styles.generic;
+function getFallbackLabel(country) {
+  if (!country) return '?';
+  return country
+    .split(/\s+/)
+    .map((word) => word[0])
+    .join('')
+    .slice(0, 3)
+    .toUpperCase();
+}
+
+function Flag({ country, compact = false, className = '', style }) {
+  const flagCode = flagCodeMap[country];
 
   return (
-    <div className={`${styles.flag} ${compact ? styles.compact : ''} ${countryClass}`} aria-label={`${country} flag`}>
-      <span className={styles.symbol} />
-    </div>
+    <span
+      className={`${styles.flag} ${compact ? styles.compact : ''} ${flagCode ? '' : styles.placeholder} ${className}`}
+      aria-label={`${country} flag`}
+      style={style}
+      title={country}
+    >
+      {flagCode ? (
+        <img
+          src={`https://flagcdn.com/${flagCode}.svg`}
+          alt=""
+          className={styles.image}
+          loading="lazy"
+        />
+      ) : (
+        getFallbackLabel(country)
+      )}
+    </span>
   );
 }
 

@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const pool = require('./src/db');
+const { getManualResults } = require('./src/manualScheduleResults');
 const { getOnlineCount, removeVisitor, touchVisitor } = require('./src/visitorPresence');
 
 const app = express();
@@ -121,6 +122,10 @@ app.get('/matches', async (req, res) => {
     console.error('Error fetching matches:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+});
+
+app.get('/schedule/manual-results', (req, res) => {
+  res.json(getManualResults());
 });
 
 app.get('/stats/teams', async (req, res) => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
 import Header from './components/Header';
@@ -65,6 +65,7 @@ function getVisitorId() {
 }
 
 function App() {
+  const mainContentRef = useRef(null);
   const [matches, setMatches] = useState(fallbackMatches);
   const [loading, setLoading] = useState(true);
   const [onlineCount, setOnlineCount] = useState(0);
@@ -74,21 +75,30 @@ function App() {
   useEffect(() => {
     const fetchMatches = async () => {
       try {
+        const resultResponse = await axios.get(`${API_BASE_URL}/schedule/manual-results`).catch(() => ({ data: {} }));
+        const resultsByMatchNo = resultResponse.data.resultsByMatchNo || {};
+
         // 优先使用实时数据
         if (liveScheduleMatches && liveScheduleMatches.length > 0) {
-          const normalizedLiveMatches = liveScheduleMatches.map(match => ({
-            id: `live-${match.matchNo}`,
-            home_team: match.teamA,
-            away_team: match.teamB,
-            kickoff_at: `${match.date}T${match.kickoffET}:00-04:00`,
-            venue: match.stadium,
-            location: `${match.city}, ${match.country}`,
-            status: match.status,
-            home_score: match.homeScore,
-            away_score: match.awayScore,
-            stage: match.stage,
-            group: match.group
-          }));
+          const normalizedLiveMatches = liveScheduleMatches.map(match => {
+            const savedResult = resultsByMatchNo[String(match.matchNo)];
+
+            return {
+              id: `live-${match.matchNo}`,
+              matchNo: match.matchNo,
+              home_team: match.teamA,
+              away_team: match.teamB,
+              kickoff_at: `${match.date}T${match.kickoffET}:00-04:00`,
+              venue: match.stadium,
+              location: `${match.city}, ${match.country}`,
+              result: savedResult?.result || match.result,
+              status: savedResult?.status || (savedResult?.result ? 'completed' : match.status),
+              home_score: savedResult?.homeScore ?? match.homeScore,
+              away_score: savedResult?.awayScore ?? match.awayScore,
+              stage: match.stage,
+              group: match.group
+            };
+          });
           setMatches(normalizedLiveMatches);
         } else {
           // 尝试从 API 获取
@@ -146,6 +156,13 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    window.requestAnimationFrame(() => {
+      mainContentRef.current?.scrollTo({ top: 0, left: 0 });
+      window.scrollTo({ top: 0, left: 0 });
+    });
+  }, [activePage]);
+
   const normalizeMatches = (apiMatches) => {
     return apiMatches.map((match, index) => ({
       ...fallbackMatches[index % fallbackMatches.length],
@@ -159,7 +176,7 @@ function App() {
       <Header onlineCount={onlineCount} onTimeZoneChange={setTimeZone} />
       <div className="content-shell">
         <Sidebar activePage={activePage} onPageChange={setActivePage} />
-        <main className="main-content">
+        <main className="main-content" ref={mainContentRef}>
           {activePage === 'my-team' ? (
             <MyTeamPage />
           ) : activePage === 'my-star' ? (
@@ -169,12 +186,25 @@ function App() {
           ) : (
             <>
               <FeaturedMatches matches={matches} loading={loading} timeZone={timeZone} />
-              <UpcomingMatches matches={matches} timeZone={timeZone} />
-              <CallToAction />
+              <UpcomingMatches
+                matches={matches}
+                timeZone={timeZone}
+                onViewSchedule={() => setActivePage('schedule')}
+              />
+              <CallToAction onExplore={() => setActivePage('my-team')} />
             </>
           )}
         </main>
       </div>
+      <footer className="site-footer">
+        <span>
+          Copyright © 2026 JustForFunLab. All rights reserved.
+          <span className="footer-divider">|</span>
+          Contact us: <a href="mailto:chuyuwang310@gmail.com">chuyuwang310@gmail.com</a>,
+          {' '}
+          <a href="mailto:shijie.zhu2018@outlook.com">shijie.zhu2018@outlook.com</a>
+        </span>
+      </footer>
     </div>
   );
 }

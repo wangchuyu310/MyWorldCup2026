@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './CallToAction.module.css';
 import { IoTrophyOutline } from 'react-icons/io5';
 
-const CallToAction = () => {
+const CallToAction = ({ onExplore }) => {
   return (
     <div className={styles.callToAction}>
       <div className={styles.icon}>
@@ -12,7 +12,7 @@ const CallToAction = () => {
         <h3>The Road to Glory Begins!</h3>
         <p>Follow your team, track your star players, and never miss a moment.</p>
       </div>
-      <button className={styles.button}>Explore Now</button>
+      <button type="button" className={styles.button} onClick={onExplore}>Explore Now</button>
     </div>
   );
 };

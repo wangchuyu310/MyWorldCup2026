@@ -40,4 +40,5 @@ The frontend runs at `http://localhost:5173` by default. The backend runs at `ht
 
 - Local `.env` files are intentionally ignored by Git.
 - The schedule page is generated from the FIFA World Cup 2026 match schedule workbook.
+- Schedule results are maintained in `backend/data/matchResults.js`; update that file and redeploy/restart the backend to publish new scores.
 - Online visitor count is tracked in backend memory for local/single-server use.

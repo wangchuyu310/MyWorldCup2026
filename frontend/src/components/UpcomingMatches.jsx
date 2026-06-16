@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './UpcomingMatches.module.css';
 import Flag from './Flag';
 
-const UpcomingMatches = ({ matches, timeZone }) => {
+const UpcomingMatches = ({ matches, timeZone, onViewSchedule }) => {
   const tz = timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
   const today = getLocalDateString(tz);
   
@@ -21,7 +21,7 @@ const UpcomingMatches = ({ matches, timeZone }) => {
     <div className={styles.upcomingMatches}>
         <div className={styles.header}>
             <h2>UPCOMING MATCHES</h2>
-            <a href="#">View Full Schedule &gt;</a>
+            <button type="button" onClick={onViewSchedule}>View Full Schedule &gt;</button>
         </div>
       <div className={styles.matchesGrid}>
         {upcoming.map((match) => (

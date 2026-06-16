@@ -13,7 +13,7 @@ export const scheduleMatches = [
     "country": "Mexico",
     "stadium": "Estadio Azteca",
     "region": "Central Region",
-    "result": "Mexico 2–0 South Africa"
+    "result": "Mexico 2-0 South Africa"
   },
   {
     "matchNo": 2,
@@ -28,7 +28,7 @@ export const scheduleMatches = [
     "country": "Mexico",
     "stadium": "Estadio Akron",
     "region": "Central Region",
-    "result": "Korea Republic 2–1 Czechia"
+    "result": "Korea Republic 2-1 Czechia"
   },
   {
     "matchNo": 3,
@@ -43,7 +43,7 @@ export const scheduleMatches = [
     "country": "Canada",
     "stadium": "BMO Field",
     "region": "Eastern Region",
-    "result": "Canada 1–1 Bosnia & Herzegovina"
+    "result": "Canada 1-1 Bosnia & Herzegovina"
   },
   {
     "matchNo": 4,
@@ -58,7 +58,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "SoFi Stadium",
     "region": "Western Region",
-    "result": "USA 4–1 Paraguay"
+    "result": "USA 4-1 Paraguay"
   },
   {
     "matchNo": 5,
@@ -73,7 +73,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "Gillette Stadium",
     "region": "Eastern Region",
-    "result": "Scotland 1–0 Haiti"
+    "result": "Haiti 0-1 Scotland"
   },
   {
     "matchNo": 6,
@@ -88,7 +88,7 @@ export const scheduleMatches = [
     "country": "Canada",
     "stadium": "BC Place",
     "region": "Western Region",
-    "result": "Brazil 1–1 Morocco"
+    "result": "Australia 2-0 Türkiye"
   },
   {
     "matchNo": 7,
@@ -103,7 +103,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "MetLife Stadium",
     "region": "Eastern Region",
-    "result": "Qatar 1–1 Switzerland"
+    "result": "Brazil 1-1 Morocco"
   },
   {
     "matchNo": 8,
@@ -118,7 +118,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "Levi's Stadium",
     "region": "Western Region",
-    "result": "Australia 2–0 Türkiye"
+    "result": "Qatar 1-1 Switzerland"
   },
   {
     "matchNo": 9,
@@ -133,7 +133,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "Lincoln Financial Field",
     "region": "Eastern Region",
-    "result": "Côte d'Ivoire 1–0 Ecuador"
+    "result": "Côte d'Ivoire 1-0 Ecuador"
   },
   {
     "matchNo": 10,
@@ -148,7 +148,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "NRG Stadium",
     "region": "Central Region",
-    "result": "Germany 7–1 Curaçao"
+    "result": "Germany 7-1 Curaçao"
   },
   {
     "matchNo": 11,
@@ -163,7 +163,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "AT&T Stadium",
     "region": "Central Region",
-    "result": "Netherlands 2–2 Japan"
+    "result": "Netherlands 2-2 Japan"
   },
   {
     "matchNo": 12,
@@ -178,7 +178,7 @@ export const scheduleMatches = [
     "country": "Mexico",
     "stadium": "Estadio BBVA",
     "region": "Central Region",
-    "result": null
+    "result": "Sweden 5-1 Tunisia"
   },
   {
     "matchNo": 13,
@@ -193,7 +193,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "Hard Rock Stadium",
     "region": "Eastern Region",
-    "result": null
+    "result": "Saudi Arabia 1-1 Uruguay"
   },
   {
     "matchNo": 14,
@@ -208,7 +208,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "Mercedes-Benz Stadium",
     "region": "Eastern Region",
-    "result": null
+    "result": "Spain 0-0 Cabo Verde"
   },
   {
     "matchNo": 15,
@@ -223,7 +223,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "SoFi Stadium",
     "region": "Western Region",
-    "result": null
+    "result": "IR Iran 2-2 New Zealand"
   },
   {
     "matchNo": 16,
@@ -238,7 +238,7 @@ export const scheduleMatches = [
     "country": "United States",
     "stadium": "Lumen Field",
     "region": "Western Region",
-    "result": null
+    "result": "Belgium 1-1 Egypt"
   },
   {
     "matchNo": 17,

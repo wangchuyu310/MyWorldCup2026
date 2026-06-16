@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './MyTeamPage.module.css';
+import Flag from './Flag';
+import { scheduleMatches } from '../data/scheduleData';
 import {
+  IoChevronDown,
   IoCheckmark,
+  IoClose,
   IoFlagOutline,
   IoInformationCircleOutline,
   IoLockClosed,
@@ -87,21 +91,11 @@ const resultSections = [
   },
 ];
 
-function StatusIcon({ status }) {
-  if (status === 'advanced') {
-    return (
-      <span className={`${styles.statusIcon} ${styles.advanced}`}>
-        <IoCheckmark />
-      </span>
-    );
-  }
-
-  return (
-    <span className={`${styles.statusIcon} ${styles.current}`}>
-      <IoRemove />
-    </span>
-  );
+function isNationalTeam(value) {
+  return value && !/^(?:[123][A-Z]+|W\d+|Winner Match \d+|Loser Match \d+)$/i.test(value);
 }
+
+import StatusIcon from './StatusIcon';
 
 function StadiumMark() {
   return (
@@ -109,10 +103,6 @@ function StadiumMark() {
       <span />
     </span>
   );
-}
-
-function UkFlag() {
-  return <span className={styles.ukFlag} aria-label="United Kingdom flag" />;
 }
 
 function LockedStage({ title }) {
@@ -133,6 +123,18 @@ function LockedStage({ title }) {
 }
 
 function MyTeamPage() {
+  const [selectedTeam, setSelectedTeam] = useState('United Kingdom');
+  const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false);
+  const nationalTeams = useMemo(() => {
+    const teams = scheduleMatches.flatMap((match) => [match.teamA, match.teamB]).filter(isNationalTeam);
+    return ['United Kingdom', ...Array.from(new Set(teams)).sort((a, b) => a.localeCompare(b))];
+  }, []);
+
+  const handleSelectTeam = (team) => {
+    setSelectedTeam(team);
+    setIsTeamMenuOpen(false);
+  };
+
   return (
     <section className={styles.myTeamPage}>
       <div className={styles.leftColumn}>
@@ -175,7 +177,7 @@ function MyTeamPage() {
 
             <div className={styles.checkpoint}>
               <span className={styles.flagNode}>
-                <UkFlag />
+                <Flag country={selectedTeam} compact className={styles.checkpointFlag} />
               </span>
               <div className={styles.checkpointCard}>
                 <IoFlagOutline />
@@ -201,9 +203,9 @@ function MyTeamPage() {
           </div>
 
           <div className={styles.legend}>
-            <span><StatusIcon status="advanced" /> Advanced</span>
-            <span><span className={`${styles.statusIcon} ${styles.eliminated}`}>x</span> Eliminated</span>
-            <span><StatusIcon status="current" /> Current Stage</span>
+            <span><StatusIcon status="advanced" /> Won</span>
+            <span><StatusIcon status="eliminated" /> Lost</span>
+            <span><StatusIcon status="current" /> Drawn</span>
           </div>
         </div>
       </div>
@@ -211,12 +213,42 @@ function MyTeamPage() {
       <div className={styles.rightColumn}>
         <div className={styles.selectedPanel}>
           <h3>Selected Team</h3>
-          <div className={styles.teamCard}>
-            <UkFlag />
-            <div>
-              <strong>United Kingdom</strong>
-              <span>United Kingdom</span>
+          <div className={styles.teamPicker}>
+            <div className={styles.teamCard}>
+              <button
+                type="button"
+                className={styles.flagButton}
+                onClick={() => setIsTeamMenuOpen((isOpen) => !isOpen)}
+                aria-expanded={isTeamMenuOpen}
+                aria-haspopup="listbox"
+                aria-label="Choose national team"
+              >
+                <Flag country={selectedTeam} compact className={styles.teamFlag} />
+                <IoChevronDown />
+              </button>
+              <div className={styles.teamDetails}>
+                <strong>{selectedTeam}</strong>
+                <span>{selectedTeam}</span>
+              </div>
             </div>
+            {isTeamMenuOpen && (
+              <div className={styles.teamMenu} role="listbox" aria-label="National teams">
+                {nationalTeams.map((team) => (
+                  <button
+                    type="button"
+                    key={team}
+                    className={team === selectedTeam ? styles.selectedTeamOption : ''}
+                    onClick={() => handleSelectTeam(team)}
+                    role="option"
+                    aria-selected={team === selectedTeam}
+                    aria-label={team}
+                  >
+                    <Flag country={team} compact className={styles.optionFlag} />
+                    <span>{team}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -267,7 +299,7 @@ function MyTeamPage() {
 
           <div className={styles.infoNote}>
             <IoInformationCircleOutline />
-            <p>The road is tough.<br />But every step brings you closer to glory.<br /><strong>Go UK!</strong></p>
+            <p>The road is tough.<br />But every step brings you closer to glory.<br /><strong>Go {selectedTeam}!</strong></p>
           </div>
         </div>
       </div>

@@ -1,0 +1,26 @@
+.statusIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.4rem;
+}
+
+.advanced {
+  background-color: #28a745;
+  border: 2px solid #28a745;
+}
+
+.eliminated {
+  background-color: #dc3545;
+  border: 2px solid #dc3545;
+}
+
+.current {
+  background-color: #ffc107;
+  border: 2px solid #ffc107;
+  color: #333;
+}
