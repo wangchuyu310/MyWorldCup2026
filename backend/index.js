@@ -15,7 +15,7 @@ app.use((req, res, next) => {
   const requestOrigin = req.headers.origin;
   const configuredOrigin = process.env.FRONTEND_ORIGIN;
   const isLocalDevOrigin = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(requestOrigin || '');
-  const allowedOrigin = configuredOrigin || (isLocalDevOrigin ? requestOrigin : 'http://localhost:5173');
+  const allowedOrigin = isLocalDevOrigin ? requestOrigin : configuredOrigin || 'http://localhost:5173';
 
   res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
