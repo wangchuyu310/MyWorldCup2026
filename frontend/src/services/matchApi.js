@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { matchResultsData } from '../data/matchResultsData';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+// Cloudflare Worker API URL (set in environment variable)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 let cachedResults = null;
 let lastFetchTime = 0;
@@ -12,14 +14,25 @@ export async function fetchMatchResults() {
     return cachedResults;
   }
 
+  // If no API URL is set, use local data (fallback for development)
+  if (!API_BASE_URL) {
+    console.log('No API_BASE_URL set, using local data');
+    cachedResults = matchResultsData;
+    lastFetchTime = now;
+    return cachedResults;
+  }
+
   try {
-    const response = await axios.get(`${API_BASE_URL}/schedule/manual-results`);
+    const response = await axios.get(`${API_BASE_URL}/api/schedule/manual-results`);
     cachedResults = response.data;
     lastFetchTime = now;
     return cachedResults;
   } catch (err) {
-    console.error('Failed to fetch match results:', err);
-    return cachedResults || { lastUpdatedAt: null, resultsByMatchNo: {} };
+    console.error('Failed to fetch match results from API, using local data:', err);
+    // Fallback to local data if API fails
+    cachedResults = matchResultsData;
+    lastFetchTime = now;
+    return cachedResults;
   }
 }
 
