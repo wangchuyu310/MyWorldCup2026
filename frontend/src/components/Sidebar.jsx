@@ -34,7 +34,7 @@ const Sidebar = ({ activePage, onPageChange }) => {
             </div>
         </div>
         <div className={styles.worldCupInfo}>
-            <h3>FIFA WORLD CUP 2026</h3>
+            <h3>Road to the Trophy</h3>
             <p>UNITED STATES | CANADA | MEXICO</p>
         </div>
       </div>
