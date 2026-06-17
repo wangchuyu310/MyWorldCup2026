@@ -37,6 +37,13 @@ function JourneyNode({ label, status = 'locked', className = '', children }) {
   );
 }
 
+function isMobileBrowser() {
+  const userAgent = navigator.userAgent || navigator.vendor || '';
+  const touchDevice = navigator.maxTouchPoints > 1;
+
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(userAgent) || touchDevice;
+}
+
 function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
   const cardRef = useRef(null);
   const headlineRef = useRef(null);
@@ -75,10 +82,40 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
         allowTaint: true,
       });
 
+      const fileName = `WorldCup2026_${selectedTeam.replace(/\s+/g, '_')}.png`;
+
+      if (!isMobileBrowser()) {
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        return;
+      }
+
+      const blob = await new Promise((resolve) => {
+        canvas.toBlob(resolve, 'image/png');
+      });
+
+      if (!blob) {
+        throw new Error('Unable to create poster image');
+      }
+
+      const file = new File([blob], fileName, { type: 'image/png' });
+
+      if (navigator.canShare?.({ files: [file] }) && navigator.share) {
+        await navigator.share({
+          files: [file],
+          title: `Go ${selectedTeam}!`,
+          text: `My World Cup 2026 journey for ${selectedTeam}`,
+        });
+        return;
+      }
+
       const link = document.createElement('a');
-      link.download = `WorldCup2026_${selectedTeam.replace(/\s+/g, '_')}.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.download = fileName;
+      link.href = URL.createObjectURL(blob);
       link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
     } catch (err) {
       console.error('Failed to generate image:', err);
     } finally {

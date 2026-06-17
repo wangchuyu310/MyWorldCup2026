@@ -1,0 +1,10 @@
+{
+  "configured": true,
+  "source": "API-Football",
+  "leagueId": "1",
+  "season": "2026",
+  "lastFetchedAt": "2026-06-16T05:30:15.104Z",
+  "totalFixtures": 0,
+  "finishedFixtures": 0,
+  "resultsByKey": {}
+}
