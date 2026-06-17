@@ -48,6 +48,7 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
   const cardRef = useRef(null);
   const headlineRef = useRef(null);
   const [generating, setGenerating] = useState(false);
+  const mobileBrowser = isMobileBrowser();
 
   useLayoutEffect(() => {
     const headline = headlineRef.current;
@@ -84,7 +85,7 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
 
       const fileName = `WorldCup2026_${selectedTeam.replace(/\s+/g, '_')}.png`;
 
-      if (!isMobileBrowser()) {
+      if (!mobileBrowser) {
         const link = document.createElement('a');
         link.download = fileName;
         link.href = canvas.toDataURL('image/png');
@@ -249,7 +250,7 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
             onClick={handleGenerate}
             disabled={generating}
           >
-            {generating ? '⏳ Generating...' : '💾 Save Image'}
+            {generating ? '⏳ Generating...' : mobileBrowser ? '📤 Share Image' : '💾 Save Image'}
           </button>
         </div>
       </div>
