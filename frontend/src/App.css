@@ -68,3 +68,30 @@
     padding: 0 14px 18px;
   }
 }
+
+@media (max-width: 640px) {
+  .app-container {
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .main-content {
+    padding: 0 10px 16px;
+    overflow: visible;
+  }
+
+  .site-footer {
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px;
+    font-size: 0.78rem;
+  }
+
+  .footer-divider {
+    display: none;
+  }
+}

@@ -705,6 +705,27 @@
     grid-template-columns: 1fr;
   }
 
+  .leftColumn,
+  .rightColumn {
+    display: contents;
+  }
+
+  .heroPanel {
+    order: 1;
+  }
+
+  .selectedPanel {
+    order: 2;
+  }
+
+  .journeyPanel {
+    order: 3;
+  }
+
+  .resultsPanel {
+    order: 4;
+  }
+
   .heroPanel,
   .groupIntro,
   .checkpointCard,
@@ -735,5 +756,213 @@
   .legend {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (max-width: 520px) {
+  .myTeamPage {
+    gap: 12px;
+    padding-top: 10px;
+  }
+
+  .leftColumn,
+  .rightColumn {
+    gap: 12px;
+  }
+
+  .heroPanel,
+  .selectedPanel,
+  .journeyPanel,
+  .resultsPanel {
+    border-radius: 12px;
+  }
+
+  .heroPanel {
+    min-height: 0;
+    padding: 18px;
+  }
+
+  .heroPanel p,
+  .selectedPanel > h3 {
+    font-size: 0.98rem;
+  }
+
+  .heroPanel h2 {
+    font-size: clamp(2rem, 12vw, 2.8rem);
+  }
+
+  .heroPanel span {
+    font-size: 1rem;
+  }
+
+  .heroTrophy {
+    width: 64px;
+    height: 78px;
+  }
+
+  .heroActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .shareBtn {
+    padding: 8px 12px;
+  }
+
+  .selectedPanel,
+  .journeyPanel {
+    padding: 14px;
+  }
+
+  .groupIntro {
+    gap: 12px;
+  }
+
+  .peopleIcon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .peopleIcon svg {
+    width: 38px;
+    height: 38px;
+  }
+
+  .groupIntro h3,
+  .resultCard h3 {
+    font-size: 1.14rem;
+  }
+
+  .matchRow {
+    grid-template-columns: 34px minmax(0, 1fr) 42px;
+    gap: 10px;
+    min-height: 0;
+    padding: 14px 10px;
+  }
+
+  .stepNumber {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .matchInfo h3,
+  .lockedStage h3,
+  .checkpointCard h3 {
+    font-size: 1.05rem;
+  }
+
+  .matchInfo p {
+    font-size: 0.95rem;
+  }
+
+  .statusIcon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .statusIcon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .checkpointCard,
+  .lockedStage {
+    gap: 10px;
+    min-height: 0;
+    padding: 14px;
+  }
+
+  .lockedStage {
+    grid-template-columns: 48px minmax(0, 1fr) 42px;
+  }
+
+  .stageIcon {
+    width: 46px;
+    height: 46px;
+  }
+
+  .stageIcon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .lockIcon,
+  .outcomeIcon,
+  .outcomeIcon > *,
+  .outcomeIcon .lockedValue {
+    width: 38px;
+    height: 38px;
+  }
+
+  .checkpoint {
+    margin: 16px 0;
+  }
+
+  .legend {
+    gap: 10px;
+    padding: 10px;
+    font-size: 0.86rem;
+  }
+
+  .teamCard {
+    align-items: flex-start;
+    gap: 12px;
+    min-height: 0;
+    padding: 12px;
+  }
+
+  .teamFlag {
+    flex-basis: 62px;
+    width: 62px;
+  }
+
+  .flagButton {
+    gap: 6px;
+  }
+
+  .teamCard strong {
+    font-size: 1.12rem;
+    overflow-wrap: anywhere;
+  }
+
+  .teamMenu {
+    max-height: 260px;
+  }
+
+  .resultsPanel {
+    padding: 14px 8px;
+  }
+
+  .resultsPanel > h2 {
+    font-size: 1.35rem;
+  }
+
+  .resultCard h3 {
+    padding: 12px 12px 8px;
+  }
+
+  .resultRow,
+  .detailRow {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .resultRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .resultRow .statusIcon {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+
+  .resultRow b {
+    font-size: 1.08rem;
+  }
+
+  .infoNote {
+    padding: 12px;
   }
 }

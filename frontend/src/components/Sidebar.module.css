@@ -184,7 +184,32 @@
 }
 
 @media (max-width: 560px) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding: 10px;
+    background:
+      linear-gradient(180deg, rgba(5, 16, 35, 0.96), rgba(5, 13, 29, 0.98)),
+      radial-gradient(circle at 50% 66%, rgba(137, 79, 255, 0.18), transparent 34%);
+  }
+
   .nav ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .navItem {
+    flex-direction: column;
+    min-height: 56px;
+    padding: 6px 4px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    line-height: 1.1;
+  }
+
+  .navItem svg {
+    width: 22px;
+    height: 22px;
   }
 }

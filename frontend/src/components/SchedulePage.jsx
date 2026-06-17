@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './SchedulePage.module.css';
-import { IoCalendarOutline, IoLocationOutline, IoSearchOutline, IoTimeOutline, IoTrophyOutline } from 'react-icons/io5';
+import { IoArrowUpOutline, IoCalendarOutline, IoLocationOutline, IoSearchOutline, IoTimeOutline, IoTrophyOutline } from 'react-icons/io5';
 import { scheduleMatches, scheduleSummary } from '../data/scheduleData';
 
 const allValue = 'All';
@@ -17,6 +17,7 @@ function formatDate(value) {
 }
 
 function SchedulePage() {
+  const schedulePanelRef = useRef(null);
   const [stageFilter, setStageFilter] = useState(allValue);
   const [regionFilter, setRegionFilter] = useState(allValue);
   const [searchTerm, setSearchTerm] = useState('');
@@ -122,6 +123,9 @@ function SchedulePage() {
   const firstMatch = scheduleMatches[0];
   const finalMatch = scheduleMatches[scheduleMatches.length - 1];
   const topCities = scheduleSummary.cityCounts.slice(0, 5);
+  const scrollToTop = () => {
+    schedulePanelRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  };
 
   return (
     <section className={styles.schedulePage}>
@@ -185,7 +189,7 @@ function SchedulePage() {
         </div>
       </div>
 
-      <div className={styles.schedulePanel}>
+      <div className={styles.schedulePanel} ref={schedulePanelRef}>
         <div className={styles.toolbar}>
           <label className={styles.searchBox}>
             <IoSearchOutline />
@@ -197,10 +201,10 @@ function SchedulePage() {
             />
           </label>
           <select value={stageFilter} onChange={(event) => setStageFilter(event.target.value)} aria-label="Stage">
-            {stages.map((stage) => <option key={stage} value={stage}>{stage}</option>)}
+            {stages.map((stage) => <option key={stage} value={stage}>{stage === allValue ? 'Select Stage' : stage}</option>)}
           </select>
           <select value={regionFilter} onChange={(event) => setRegionFilter(event.target.value)} aria-label="Region">
-            {regions.map((region) => <option key={region} value={region}>{region}</option>)}
+            {regions.map((region) => <option key={region} value={region}>{region === allValue ? 'Select Region' : region}</option>)}
           </select>
           <span>{filteredMatches.length} matches</span>
           <small className={!manualResults.message ? styles.syncReady : styles.syncMuted}>{resultStatusLabel}</small>
@@ -248,6 +252,10 @@ function SchedulePage() {
           </table>
         </div>
       </div>
+      <button type="button" className={styles.backToTop} onClick={scrollToTop}>
+        <IoArrowUpOutline />
+        Back to top
+      </button>
     </section>
   );
 }

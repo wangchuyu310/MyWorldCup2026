@@ -330,7 +330,7 @@ function MyTeamPage() {
               <IoPeople />
             </span>
             <div>
-              <h3>Group Stage</h3>
+              <h3>Stages</h3>
               <p>Top 2 or Best 8 Third-Place Teams advance to Round of 32</p>
             </div>
           </div>

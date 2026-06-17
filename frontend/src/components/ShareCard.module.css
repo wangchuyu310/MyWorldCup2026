@@ -781,11 +781,96 @@
 }
 
 @media (max-width: 560px) {
+  .overlay {
+    padding: 6px;
+  }
+
   .modal {
-    width: calc(100vw - 24px);
+    width: calc(100vw - 12px);
+  }
+
+  .modalHeader {
+    padding: 10px 14px;
+  }
+
+  .modalHeader h2 {
+    font-size: 0.95rem;
+  }
+
+  .closeBtn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .cardWrapper {
+    padding: 8px 8px 6px;
+  }
+
+  .shareCard {
+    width: min(100%, calc((100vh - 150px) * 0.76), 430px);
+  }
+
+  .checkpointNode {
+    top: 31%;
+    right: 1%;
+    width: 35%;
+  }
+
+  .checkpointNode .journeyNode {
+    padding: 7px 5px;
+    border-radius: 16px;
+  }
+
+  .checkpointNode .journeyNode > span {
+    max-width: 110px;
+    font-size: 0.54rem;
+  }
+
+  .roundNode {
+    top: 38%;
+  }
+
+  .knockoutGrid .journeyNode:nth-child(1) {
+    left: 16%;
+    top: 48%;
+  }
+
+  .knockoutGrid .journeyNode:nth-child(1) > span {
+    z-index: 7;
+    max-width: 78px;
+    background: rgba(3, 8, 18, 0.82);
+  }
+
+  .knockoutGrid .journeyNode:nth-child(4) {
+    left: 72%;
+    top: 58%;
+  }
+
+  .knockoutGrid .journeyNode:nth-child(4) > span {
+    z-index: 7;
+    max-width: 92px;
+    font-size: 0.53rem;
+    background: rgba(3, 8, 18, 0.82);
+    transform: translateX(-6px);
+  }
+
+  .knockoutGrid .journeyNode:nth-child(5) {
+    left: 82%;
+    top: 76%;
+  }
+
+  .trophyColumn {
+    right: -6%;
+  }
+
+  .controls {
+    padding: 8px 14px 10px;
   }
 
   .generateBtn {
-    width: 100%;
+    width: min(100%, 220px);
+    min-height: 44px;
+    padding: 10px 18px;
+    font-size: 0.92rem;
   }
 }
