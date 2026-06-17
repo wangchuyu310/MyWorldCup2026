@@ -6,16 +6,24 @@ const UpcomingMatches = ({ matches, timeZone, onViewSchedule }) => {
   const tz = timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
   const today = getLocalDateString(tz);
   
-  let upcoming = matches.filter(match => {
-    const matchDate = getMatchDateInZone(match.kickoff_at, tz);
-    return matchDate >= today;
-  });
-  
+  const nextMatchDate = matches
+    .map((match) => match.date || getMatchDateInZone(match.kickoff_at, tz))
+    .filter((matchDate) => matchDate > today)
+    .sort()[0];
+
+  let upcoming = nextMatchDate
+    ? matches.filter((match) => (match.date || getMatchDateInZone(match.kickoff_at, tz)) === nextMatchDate)
+    : [];
+
   if (upcoming.length === 0) {
-    upcoming = matches;
+    const firstMatchDate = matches
+      .map((match) => match.date || getMatchDateInZone(match.kickoff_at, tz))
+      .sort()[0];
+
+    upcoming = firstMatchDate
+      ? matches.filter((match) => (match.date || getMatchDateInZone(match.kickoff_at, tz)) === firstMatchDate)
+      : matches;
   }
-  
-  upcoming = upcoming.slice(0, 4);
 
   return (
     <div className={styles.upcomingMatches}>

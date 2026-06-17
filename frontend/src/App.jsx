@@ -8,7 +8,7 @@ import UpcomingMatches from './components/UpcomingMatches';
 import CallToAction from './components/CallToAction';
 import MyTeamPage from './components/MyTeamPage';
 import SchedulePage from './components/SchedulePage';
-import { scheduleMatches as liveScheduleMatches } from './data/liveSchedule';
+import { scheduleMatches as scheduleTableMatches } from './data/scheduleData';
 
 const fallbackMatches = [
   {
@@ -77,14 +77,15 @@ function App() {
         const resultResponse = await axios.get(`${API_BASE_URL}/schedule/manual-results`).catch(() => ({ data: {} }));
         const resultsByMatchNo = resultResponse.data.resultsByMatchNo || {};
 
-        // 优先使用实时数据
-        if (liveScheduleMatches && liveScheduleMatches.length > 0) {
-          const normalizedLiveMatches = liveScheduleMatches.map(match => {
+        if (scheduleTableMatches && scheduleTableMatches.length > 0) {
+          const normalizedLiveMatches = scheduleTableMatches.map(match => {
             const savedResult = resultsByMatchNo[String(match.matchNo)];
 
             return {
               id: `live-${match.matchNo}`,
               matchNo: match.matchNo,
+              date: match.date,
+              day: match.day,
               home_team: match.teamA,
               away_team: match.teamB,
               kickoff_at: `${match.date}T${match.kickoffET}:00-04:00`,

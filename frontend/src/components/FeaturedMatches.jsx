@@ -7,14 +7,12 @@ const FeaturedMatches = ({ matches, loading, timeZone }) => {
   const today = getLocalDateString(tz);
   
   let featured = matches.filter(match => {
-    const matchDate = getMatchDateInZone(match.kickoff_at, tz);
+    const matchDate = match.date || getMatchDateInZone(match.kickoff_at, tz);
     return matchDate === today;
   });
   
   if (featured.length === 0) {
     featured = matches.slice(0, 2);
-  } else {
-    featured = featured.slice(0, 2);
   }
 
   return (
@@ -30,12 +28,12 @@ const FeaturedMatches = ({ matches, loading, timeZone }) => {
               <span className={styles.liveBadge}>LIVE</span>
             )}
           </div>
-          <div className={styles.team}>
+          <div className={`${styles.team} ${styles.homeTeam}`}>
             <span>{match.home_team}</span>
             <Flag country={match.home_team} />
           </div>
           <div className={styles.vs}>VS.</div>
-          <div className={styles.team}>
+          <div className={`${styles.team} ${styles.awayTeam}`}>
             <span>{match.away_team}</span>
             <Flag country={match.away_team} />
           </div>

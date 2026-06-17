@@ -147,7 +147,7 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
             <div className={styles.posterHeader}>
               <div className={styles.posterBrand}>
                 <IoTrophy />
-                <span>FIFA World Cup 2026™</span>
+                <span>Team Journey of World Cup 2026</span>
               </div>
 
               <div className={styles.posterTeamRow}>

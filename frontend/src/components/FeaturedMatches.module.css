@@ -128,11 +128,75 @@
   .matchCard {
     min-height: 0;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 18px;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-areas:
+      "time time time"
+      "home vs away"
+      "result result result";
+    gap: 14px 10px;
+    padding: 18px 12px 20px;
+    align-items: center;
+  }
+
+  .matchInfo {
+    display: contents;
+  }
+
+  .matchTime {
+    grid-area: time;
+    justify-self: center;
+    color: #f4f5fb;
+    font-size: 1rem;
+    font-weight: 800;
+  }
+
+  .score,
+  .liveBadge {
+    grid-area: result;
+    justify-self: center;
+  }
+
+  .score {
+    padding: 4px 14px;
+    font-size: 1rem;
+    border: 1px solid rgba(175, 77, 255, 0.34);
+    background: rgba(175, 77, 255, 0.18);
+  }
+
+  .homeTeam {
+    grid-area: home;
+  }
+
+  .awayTeam {
+    grid-area: away;
+  }
+
+  .team {
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .team span {
+    max-width: 100%;
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1.15;
+    text-align: center;
+    overflow-wrap: anywhere;
   }
 
   .vs {
+    grid-area: vs;
     justify-content: center;
+    align-self: center;
+    min-width: 44px;
+    font-size: 1.45rem;
+    line-height: 1;
+    gap: 0;
+  }
+
+  .vs::before,
+  .vs::after {
+    display: none;
   }
 }

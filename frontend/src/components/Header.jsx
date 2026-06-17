@@ -2,35 +2,18 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Header.module.css';
 import { IoTimeOutline, IoTrophyOutline } from 'react-icons/io5';
 
-const fallbackTimeZones = [
-  'UTC',
+const timeZoneOptions = [
   'America/Los_Angeles',
   'America/Denver',
   'America/Chicago',
   'America/New_York',
-  'America/Toronto',
-  'America/Mexico_City',
-  'America/Sao_Paulo',
+  'UTC',
   'Europe/London',
   'Europe/Paris',
-  'Europe/Berlin',
-  'Africa/Cairo',
-  'Asia/Dubai',
-  'Asia/Kolkata',
-  'Asia/Bangkok',
   'Asia/Shanghai',
   'Asia/Tokyo',
   'Australia/Sydney',
-  'Pacific/Auckland',
 ];
-
-function getTimeZones() {
-  if (typeof Intl.supportedValuesOf === 'function') {
-    return Intl.supportedValuesOf('timeZone');
-  }
-
-  return fallbackTimeZones;
-}
 
 function getDefaultTimeZone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
@@ -51,8 +34,13 @@ function formatDateTime(date, timeZone) {
 }
 
 const Header = ({ onlineCount, onTimeZoneChange }) => {
-  const timeZones = useMemo(getTimeZones, []);
-  const [selectedTimeZone, setSelectedTimeZone] = useState(getDefaultTimeZone);
+  const [localTimeZone] = useState(getDefaultTimeZone);
+  const timeZones = useMemo(() => {
+    return timeZoneOptions.includes(localTimeZone)
+      ? timeZoneOptions
+      : [localTimeZone, ...timeZoneOptions];
+  }, [localTimeZone]);
+  const [selectedTimeZone, setSelectedTimeZone] = useState(localTimeZone);
   const [now, setNow] = useState(() => new Date());
   const measureRef = useRef(null);
   const [selectWidth, setSelectWidth] = useState(128);
@@ -64,6 +52,12 @@ const Header = ({ onlineCount, onTimeZoneChange }) => {
       onTimeZoneChange(newTimeZone);
     }
   };
+
+  useEffect(() => {
+    if (onTimeZoneChange) {
+      onTimeZoneChange(localTimeZone);
+    }
+  }, [localTimeZone, onTimeZoneChange]);
 
   useEffect(() => {
     const timerId = window.setInterval(() => {

@@ -5,6 +5,23 @@ import { scheduleMatches, scheduleSummary } from '../data/scheduleData';
 
 const allValue = 'All';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const EASTERN_TIME_OFFSET = '-04:00';
+const timeZoneOptions = [
+  'America/Los_Angeles',
+  'America/Denver',
+  'America/Chicago',
+  'America/New_York',
+  'UTC',
+  'Europe/London',
+  'Europe/Paris',
+  'Asia/Shanghai',
+  'Asia/Tokyo',
+  'Australia/Sydney',
+];
+
+function getDefaultTimeZone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+}
 
 function formatDate(value) {
   const date = new Date(`${value}T00:00:00`);
@@ -16,8 +33,38 @@ function formatDate(value) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
+function getKickoffDate(match) {
+  const date = new Date(`${match.date}T${match.kickoffET}:00${EASTERN_TIME_OFFSET}`);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatConvertedTime(match, timeZone) {
+  const date = getKickoffDate(match);
+
+  if (!date) {
+    return match.kickoffET || 'TBD';
+  }
+
+  const parts = new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone,
+  }).formatToParts(date);
+  const partMap = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+
+  return `${partMap.hour}:${partMap.minute}`;
+}
+
 function SchedulePage() {
   const schedulePanelRef = useRef(null);
+  const [localTimeZone] = useState(getDefaultTimeZone);
+  const timeZones = useMemo(() => {
+    return timeZoneOptions.includes(localTimeZone)
+      ? timeZoneOptions
+      : [localTimeZone, ...timeZoneOptions];
+  }, [localTimeZone]);
+  const [selectedTimeZone, setSelectedTimeZone] = useState(localTimeZone);
   const [stageFilter, setStageFilter] = useState(allValue);
   const [regionFilter, setRegionFilter] = useState(allValue);
   const [searchTerm, setSearchTerm] = useState('');
@@ -106,19 +153,18 @@ function SchedulePage() {
         match.stadium,
         match.region,
         match.result,
+        formatConvertedTime(match, selectedTimeZone),
       ].filter(Boolean).join(' ').toLowerCase();
 
       return stageMatches && regionMatches && (!search || searchable.includes(search));
     });
-  }, [matchesWithResults, regionFilter, searchTerm, stageFilter]);
+  }, [matchesWithResults, regionFilter, searchTerm, selectedTimeZone, stageFilter]);
 
   const resultStatusLabel = manualResults.loading
     ? 'Loading saved results...'
     : manualResults.message
       ? manualResults.message
-      : manualResults.lastUpdatedAt
-      ? `Manual results updated ${new Date(manualResults.lastUpdatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
-      : 'Results read from backend/data/matchResults.js';
+      : '';
 
   const firstMatch = scheduleMatches[0];
   const finalMatch = scheduleMatches[scheduleMatches.length - 1];
@@ -132,7 +178,7 @@ function SchedulePage() {
       <div className={styles.hero}>
         <div>
           <p>Complete Match Schedule</p>
-          <h2>FIFA World Cup 2026</h2>
+          <h2>World Cup 2026 Tracker</h2>
           <span>All kickoff times are Eastern Time (ET)</span>
         </div>
         <IoTrophyOutline />
@@ -200,6 +246,9 @@ function SchedulePage() {
               onChange={(event) => setSearchTerm(event.target.value)}
             />
           </label>
+          <select value={selectedTimeZone} onChange={(event) => setSelectedTimeZone(event.target.value)} aria-label="Time Zone">
+            {timeZones.map((timeZone) => <option key={timeZone} value={timeZone}>{timeZone}</option>)}
+          </select>
           <select value={stageFilter} onChange={(event) => setStageFilter(event.target.value)} aria-label="Stage">
             {stages.map((stage) => <option key={stage} value={stage}>{stage === allValue ? 'Select Stage' : stage}</option>)}
           </select>
@@ -207,7 +256,9 @@ function SchedulePage() {
             {regions.map((region) => <option key={region} value={region}>{region === allValue ? 'Select Region' : region}</option>)}
           </select>
           <span>{filteredMatches.length} matches</span>
-          <small className={!manualResults.message ? styles.syncReady : styles.syncMuted}>{resultStatusLabel}</small>
+          {resultStatusLabel && (
+            <small className={!manualResults.message ? styles.syncReady : styles.syncMuted}>{resultStatusLabel}</small>
+          )}
         </div>
 
         <div className={styles.tableWrap}>
@@ -230,7 +281,7 @@ function SchedulePage() {
                 <tr key={match.matchNo}>
                   <td><b>{match.matchNo}</b></td>
                   <td><strong>{formatDate(match.date)}</strong><span>{match.day}</span></td>
-                  <td>{match.kickoffET}</td>
+                  <td>{formatConvertedTime(match, selectedTimeZone)}</td>
                   <td><em>{match.stage}</em></td>
                   <td>{match.group || '-'}</td>
                   <td>
@@ -244,7 +295,6 @@ function SchedulePage() {
                     <strong className={match.result ? styles.resultValue : styles.emptyResult}>
                       {match.result || '-'}
                     </strong>
-                    {match.resultStatus && <small>{match.resultStatus}</small>}
                   </td>
                 </tr>
               ))}
