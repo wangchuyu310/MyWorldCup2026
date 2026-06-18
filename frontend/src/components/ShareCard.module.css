@@ -165,7 +165,14 @@
 
 .crestFlag {
   width: 50px !important;
+  background: #ffffff;
   border-radius: 6px;
+}
+
+.crestFlag img,
+.startFlag img,
+.roundFlag img {
+  object-fit: contain;
 }
 
 .posterTitle {
@@ -434,7 +441,8 @@
 .startFlag,
 .roundFlag {
   width: 34px !important;
-  border-radius: 50%;
+  background: #ffffff;
+  border-radius: 5px;
 }
 
 .checkpointNode .journeyNode {
@@ -812,8 +820,21 @@
     width: min(100%, calc((100vh - 150px) * 0.76), 430px);
   }
 
+  .crestFlag {
+    width: 54px !important;
+    height: 36px;
+    border-radius: 7px;
+  }
+
+  .startFlag,
+  .roundFlag {
+    width: 34px !important;
+    height: 23px;
+    border-radius: 4px;
+  }
+
   .checkpointNode {
-    top: 31%;
+    top: 28%;
     right: 1%;
     width: 35%;
   }
@@ -844,8 +865,8 @@
   }
 
   .knockoutGrid .journeyNode:nth-child(4) {
-    left: 72%;
-    top: 58%;
+    left: 82%;
+    top: 59%;
   }
 
   .knockoutGrid .journeyNode:nth-child(4) > span {
@@ -853,12 +874,12 @@
     max-width: 92px;
     font-size: 0.53rem;
     background: rgba(3, 8, 18, 0.82);
-    transform: translateX(-6px);
+    transform: translateX(-4px);
   }
 
   .knockoutGrid .journeyNode:nth-child(5) {
     left: 82%;
-    top: 76%;
+    top: 80%;
   }
 
   .trophyColumn {
