@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import { IoCheckmark, IoClose, IoFlag, IoLockClosed, IoRemove, IoTrophy } from 'react-icons/io5';
-import Flag, { getFlagUrl } from './Flag';
+import { getFlagUrl } from './Flag';
 import styles from './ShareCard.module.css';
 
 const knockoutNodes = [
@@ -42,6 +42,33 @@ function isMobileBrowser() {
   const touchDevice = navigator.maxTouchPoints > 1;
 
   return /Android|iPhone|iPad|iPod|Mobile/i.test(userAgent) || touchDevice;
+}
+
+function PosterFlag({ country, className = '' }) {
+  const flagUrl = getFlagUrl(country);
+  const posterFlagUrl = flagUrl?.replace('https://flagcdn.com/', 'https://flagcdn.com/w160/').replace('.svg', '.png');
+
+  return (
+    <span
+      className={`${styles.posterFlag} ${className}`}
+      style={posterFlagUrl ? { backgroundImage: `url("${posterFlagUrl}")` } : undefined}
+      aria-label={`${country} flag`}
+      title={country}
+    >
+      {!flagUrl ? country?.slice(0, 3).toUpperCase() : null}
+    </span>
+  );
+}
+
+function StartJourneyNode({ country }) {
+  return (
+    <div className={`${styles.journeyNode} ${styles.startNode}`}>
+      <div className={styles.startFlagCircle}>
+        <PosterFlag country={country} className={styles.startFlag} />
+      </div>
+      <span>Start</span>
+    </div>
+  );
 }
 
 function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
@@ -152,7 +179,7 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
 
               <div className={styles.posterTeamRow}>
                 <div className={styles.crest}>
-                  <Flag country={selectedTeam} compact className={styles.crestFlag} />
+                  <PosterFlag country={selectedTeam} className={styles.crestFlag} />
                 </div>
                 <div className={styles.posterTitle}>
                   <strong ref={headlineRef}>Go {selectedTeam}!</strong>
@@ -196,9 +223,7 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
                 />
               </svg>
 
-              <JourneyNode label="Start" status="current" className={styles.startNode}>
-                <Flag country={selectedTeam} compact className={styles.startFlag} />
-              </JourneyNode>
+              <StartJourneyNode country={selectedTeam} />
 
               <div className={styles.groupNodeRow}>
                 {groupMatches.map((match) => (
@@ -219,7 +244,7 @@ function ShareCard({ selectedTeam, groupMatches, checkpointStatus, onClose }) {
               <div className={styles.roundNode}>
                 <JourneyNode label="Round of 32" status={roundOf32Status}>
                   {roundOf32Status === 'current' ? (
-                    <Flag country={selectedTeam} compact className={styles.roundFlag} />
+                    <PosterFlag country={selectedTeam} className={styles.roundFlag} />
                   ) : null}
                 </JourneyNode>
               </div>

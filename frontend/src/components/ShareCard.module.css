@@ -165,14 +165,24 @@
 
 .crestFlag {
   width: 50px !important;
+  height: 32px;
   background: #ffffff;
   border-radius: 6px;
 }
 
-.crestFlag img,
-.startFlag img,
-.roundFlag img {
-  object-fit: contain;
+.posterFlag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 10;
+  background-color: #ffffff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  color: #10203a;
+  font-size: 0.55rem;
+  font-weight: 900;
+  line-height: 1;
 }
 
 .posterTitle {
@@ -240,6 +250,19 @@
   z-index: 2;
   left: -2%;
   top: 4%;
+}
+
+.startFlagCircle {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 3px solid #ffc226;
+  background: radial-gradient(circle at 35% 30%, #ffdc64, #7e5c00);
+  box-shadow: 0 0 18px rgba(255, 194, 38, 0.7);
 }
 
 .groupNodeRow {
@@ -438,11 +461,22 @@
   background: radial-gradient(circle at 35% 30%, #3d424d, #0a0d14);
 }
 
-.startFlag,
 .roundFlag {
-  width: 34px !important;
+  flex: 0 0 auto;
+  width: 32px !important;
+  height: 20px;
   background: #ffffff;
-  border-radius: 5px;
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.startFlag {
+  flex: 0 0 auto;
+  width: 34px !important;
+  height: 22px;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: none;
 }
 
 .checkpointNode .journeyNode {
@@ -826,10 +860,15 @@
     border-radius: 7px;
   }
 
-  .startFlag,
   .roundFlag {
+    width: 30px !important;
+    height: 19px;
+    border-radius: 4px;
+  }
+
+  .startFlag {
     width: 34px !important;
-    height: 23px;
+    height: 22px;
     border-radius: 4px;
   }
 
