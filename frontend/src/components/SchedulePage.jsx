@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './SchedulePage.module.css';
 import { IoArrowUpOutline, IoCalendarOutline, IoLocationOutline, IoSearchOutline, IoTimeOutline, IoTrophyOutline } from 'react-icons/io5';
 import { scheduleMatches, scheduleSummary } from '../data/scheduleData';
+import { matchResultsData } from '../data/matchResultsData';
 
 const allValue = 'All';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
@@ -70,8 +71,8 @@ function SchedulePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [manualResults, setManualResults] = useState({
     loading: true,
-    lastUpdatedAt: null,
-    resultsByMatchNo: {},
+    lastUpdatedAt: matchResultsData.lastUpdatedAt,
+    resultsByMatchNo: matchResultsData.resultsByMatchNo,
     message: '',
   });
 
@@ -97,11 +98,12 @@ function SchedulePage() {
         }
       } catch (error) {
         if (isMounted) {
-          setManualResults((current) => ({
-            ...current,
+          setManualResults({
             loading: false,
+            lastUpdatedAt: matchResultsData.lastUpdatedAt,
+            resultsByMatchNo: matchResultsData.resultsByMatchNo,
             message: error.message,
-          }));
+          });
         }
       }
     };

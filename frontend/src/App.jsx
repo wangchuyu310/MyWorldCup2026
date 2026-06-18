@@ -9,6 +9,7 @@ import CallToAction from './components/CallToAction';
 import MyTeamPage from './components/MyTeamPage';
 import SchedulePage from './components/SchedulePage';
 import { scheduleMatches as scheduleTableMatches } from './data/scheduleData';
+import { matchResultsData } from './data/matchResultsData';
 
 const fallbackMatches = [
   {
@@ -74,7 +75,7 @@ function App() {
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const resultResponse = await axios.get(`${API_BASE_URL}/schedule/manual-results`).catch(() => ({ data: {} }));
+        const resultResponse = await axios.get(`${API_BASE_URL}/schedule/manual-results`).catch(() => ({ data: matchResultsData }));
         const resultsByMatchNo = resultResponse.data.resultsByMatchNo || {};
 
         if (scheduleTableMatches && scheduleTableMatches.length > 0) {
