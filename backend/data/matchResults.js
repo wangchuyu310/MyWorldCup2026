@@ -2,7 +2,7 @@
 //
 // Use the Schedule page match number as the key. Keep all 104 matches here.
 // For matches not played yet, leave result blank and scores as null.
-// After changing this file, restart/redeploy the backend so the website can read it.
+// The frontend dev and build commands copy this data into the deployed website.
 //
 // When adding a final score, update result, homeScore, awayScore, status, and updatedAt.
 
